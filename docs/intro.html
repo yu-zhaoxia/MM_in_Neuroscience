@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Introduction | Mixed-effects model and its application in neuroscience</title>
+  <meta name="description" content="This is the online supplemental to accomany Yu Z, Guindani M, Grieco SF, Chen L, Holmes TC, Xu X. (2022) Beyond t-Test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron. 110: 21-23." />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Introduction | Mixed-effects model and its application in neuroscience" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This is the online supplemental to accomany Yu Z, Guindani M, Grieco SF, Chen L, Holmes TC, Xu X. (2022) Beyond t-Test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron. 110: 21-23." />
+  <meta name="github-repo" content="rstudio/mm-in-neuroscience" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Introduction | Mixed-effects model and its application in neuroscience" />
+  
+  <meta name="twitter:description" content="This is the online supplemental to accomany Yu Z, Guindani M, Grieco SF, Chen L, Holmes TC, Xu X. (2022) Beyond t-Test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron. 110: 21-23." />
+  
+
+<meta name="author" content="Zhaoxia Yu, Michele Guindani, Steven F. Grieco, Lujia Chen, Todd C. Holmes, Xiangmin Xu" />
+
+
+<meta name="date" content="2022-06-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="mixed-effects-model-analysis.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Application of Mixed-effects Model in Neuroscience</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Supplemental data download</a></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="3" data-path="mixed-effects-model-analysis.html"><a href="mixed-effects-model-analysis.html"><i class="fa fa-check"></i><b>3</b> Mixed-effects model analysis</a></li>
+<li class="chapter" data-level="4" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html"><i class="fa fa-check"></i><b>4</b> Conduct LME in R: Example 1</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#wrong-analysis-with-lm-or-anova"><i class="fa fa-check"></i><b>4.1</b> Wrong analysis with lm or anova</a></li>
+<li class="chapter" data-level="4.2" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#lme-estimation-methods"><i class="fa fa-check"></i><b>4.2</b> LME: estimation methods</a></li>
+<li class="chapter" data-level="4.3" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#on-the-degrees-of-freedom-and-p-values"><i class="fa fa-check"></i><b>4.3</b> On the degrees of freedom and P-values</a></li>
+<li class="chapter" data-level="4.4" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#the-overall-p-value-for-the-treatment-factor-vs-p-values-for-individual-treatments"><i class="fa fa-check"></i><b>4.4</b> The overall p-value for the treatment factor vs p-values for individual treatments</a></li>
+<li class="chapter" data-level="4.5" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#p-value-adjustment-for-multiple-comparisons"><i class="fa fa-check"></i><b>4.5</b> P-value adjustment for multiple comparisons</a></li>
+<li class="chapter" data-level="4.6" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#robust-methods-with-parametric-bootstrap"><i class="fa fa-check"></i><b>4.6</b> Robust methods with parametric bootstrap</a></li>
+<li class="chapter" data-level="4.7" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#additional-tools"><i class="fa fa-check"></i><b>4.7</b> Additional tools</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html"><i class="fa fa-check"></i><b>5</b> Conduct LME in R: Example 2</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#wrong-analysis"><i class="fa fa-check"></i><b>5.1</b> Wrong analysis</a></li>
+<li class="chapter" data-level="5.2" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#lme"><i class="fa fa-check"></i><b>5.2</b> LME</a></li>
+<li class="chapter" data-level="5.3" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#why-pooling-data-naively-is-not-a-good-idea"><i class="fa fa-check"></i><b>5.3</b> Why pooling data naively is not a good idea?</a></li>
+<li class="chapter" data-level="5.4" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#remark-on-the-minimum-number-of-levels-for-using-random-effects"><i class="fa fa-check"></i><b>5.4</b> Remark: on the minimum number of levels for using random-effects</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html"><i class="fa fa-check"></i><b>6</b> Conduct LME in R: Example 3</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#wrong-analysis-with-lm-paired-or-unpaired-t-test"><i class="fa fa-check"></i><b>6.1</b> Wrong analysis with lm, paired or unpaired t-test</a></li>
+<li class="chapter" data-level="6.2" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#a-note-on-nested-random-effects"><i class="fa fa-check"></i><b>6.2</b> A note on “nested” random effects</a></li>
+<li class="chapter" data-level="6.3" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#on-models-with-more-random-effects"><i class="fa fa-check"></i><b>6.3</b> On models with more random effects</a></li>
+<li class="chapter" data-level="6.4" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#a-note-on-the-testing-of-random-effects."><i class="fa fa-check"></i><b>6.4</b> A note on the testing of random-effects.</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="generalized-linear-mixed-effects-models-and-example-4.html"><a href="generalized-linear-mixed-effects-models-and-example-4.html"><i class="fa fa-check"></i><b>7</b> Generalized Linear Mixed-Effects Models and Example 4</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="generalized-linear-mixed-effects-models-and-example-4.html"><a href="generalized-linear-mixed-effects-models-and-example-4.html#fit-a-glmm-in-r"><i class="fa fa-check"></i><b>7.1</b> Fit a GLMM in R</a></li>
+<li class="chapter" data-level="7.2" data-path="generalized-linear-mixed-effects-models-and-example-4.html"><a href="generalized-linear-mixed-effects-models-and-example-4.html#use-nonparametric-methods-to-produce-more-accurate-p-values"><i class="fa fa-check"></i><b>7.2</b> Use nonparametric methods to produce more accurate p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="a-bayesian-analysis-of-example-4.html"><a href="a-bayesian-analysis-of-example-4.html"><i class="fa fa-check"></i><b>8</b> A Bayesian Analysis of Example 4</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Mixed-effects model and its application in neuroscience</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="intro" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Introduction<a href="intro.html#intro" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Why do the conventional methods fail in the presence of correlated data?</p>
+<p>In basic neuroscience research, data dependency due to clustering or repeated measurements is probably the norm rather than the exception. Unfortunately, the most widely used methods under these situations are still the t-test and ANOVA, which do not take dependence into account, thus leading to incorrect statistical inference and misleading conclusions.</p>
+<p>We will use a data set collected from our own work to assess the degree of data dependency due to clustering (animal effects) and to illustrate the consequences of ignoring the dependent structure. In this example, we measured the change in pCREB immunoreactivity of 1,200 putative excitatory neurons in mouse visual cortex at different time points: collected at baseline (saline), 24, 48, 72 hours, and 1 week following ketamine treatment, from 24 mice. See <span class="citation"><a href="#ref-grieco2020subanesthetic" role="doc-biblioref">Grieco et al.</a> (<a href="#ref-grieco2020subanesthetic" role="doc-biblioref">2020</a>)</span> for more details. Figure <a href="intro.html#fig:S1">2.1</a> shows that the changes in pCREB immunoreactivity tend to be clustered, i.e., measurements from the same animal tend to be more similar to each other than measurements from different animals.</p>
+<!-- regular html comment The following code doesn't work, as \ should be replaced by /
+knitr::include_graphics(rep('C:\Users\yu790\Desktop\Desktop\Bookdown\bookdown-demo-main\Fig3S.png'))
+-->
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="intro.html#cb2-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;Fig1S.jpg&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:S1"></span>
+<img src="Fig1S.jpg" alt="Normalized pCREB staining intensity values from 1,200 neurons (Example 1). The values in each cluster were from one animal. In total, pCREB values were measured for 1,200 neurons from 24 mice at five conditions: saline (7 mice), 24h (6 mice), 48h (3 mice), 72h (3 mice), 1week (5 mice) after treatment." width="100%" />
+<p class="caption">
+Figure 2.1: Normalized pCREB staining intensity values from 1,200 neurons (Example 1). The values in each cluster were from one animal. In total, pCREB values were measured for 1,200 neurons from 24 mice at five conditions: saline (7 mice), 24h (6 mice), 48h (3 mice), 72h (3 mice), 1week (5 mice) after treatment.
+</p>
+</div>
+<p>We compute the intra-class correlation (ICC) to quantify the magnitude of dependency within animals using the software R, a free and open source software (CRAN) (R Development Core Team, 2020). One major advantage of R over other open source or commercial software is that R is widely adopted and continuously reassessed for accuracy, and has a rich collection of user-contributed packages (over 15,000), thus supporting a programing environment for developers and access to cutting-edge statistical methods. In this tutorial, we will use the following R packages: <strong>lme4</strong> (<span class="citation"><a href="#ref-bates2014fitting" role="doc-biblioref">Bates et al.</a> (<a href="#ref-bates2014fitting" role="doc-biblioref">2014</a>)</span>), __ (<span class="citation"><a href="#ref-pinheiro2007linear" role="doc-biblioref">Jose Pinheiro et al.</a> (<a href="#ref-pinheiro2007linear" role="doc-biblioref">2007</a>)</span>), <strong>icc</strong> (<span class="citation"><a href="#ref-wolak2015package" role="doc-biblioref">Wolak and Wolak</a> (<a href="#ref-wolak2015package" role="doc-biblioref">2015</a>)</span>), <strong>pbkrtest</strong> (<span class="citation"><a href="#ref-halekoh2014kenward" role="doc-biblioref">Halekoh and Højsgaard</a> (<a href="#ref-halekoh2014kenward" role="doc-biblioref">2014</a>)</span>), <strong>brms</strong> (<span class="citation"><a href="#ref-burkner2017brms" role="doc-biblioref">Bürkner</a> (<a href="#ref-burkner2017brms" role="doc-biblioref">2017b</a>)</span>, <span class="citation"><a href="#ref-burkner2017advanced" role="doc-biblioref">Bürkner</a> (<a href="#ref-burkner2017advanced" role="doc-biblioref">2017a</a>)</span>), <strong>lmerTest</strong> (<span class="citation"><a href="#ref-kuznetsova2017lmertest" role="doc-biblioref">Kuznetsova, Brockhoff, and Christensen</a> (<a href="#ref-kuznetsova2017lmertest" role="doc-biblioref">2017</a>)</span>), <strong>emmeans</strong> (<span class="citation"><a href="#ref-lenth2019estimated" role="doc-biblioref">Lenth et al.</a> (<a href="#ref-lenth2019estimated" role="doc-biblioref">2019</a>)</span>), <strong>car</strong> (<span class="citation"><a href="#ref-fox2018r" role="doc-biblioref">Fox and Weisberg</a> (<a href="#ref-fox2018r" role="doc-biblioref">2018</a>)</span>) , and <strong>sjPlot</strong> (<span class="citation"><a href="#ref-ludecke2018sjplot" role="doc-biblioref">Lüdecke</a> (<a href="#ref-ludecke2018sjplot" role="doc-biblioref">2018</a>)</span>). If they have not been installed onto your computer, you will need to install them by removing the “#” symbol and copy one line at a time to your R console. The “#” symbol is used for commenting out code in R. The installation of a package to a computer only needs to be done once. However, the libraries for data analysis need to be loaded each time you start the R software. We recommend you only load a library when it is needed.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="intro.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4) <span class="co">#if the library has been downloaded to your local computer, your can use install.pckages(&quot;lme4&quot;) to download it</span></span>
+<span id="cb3-2"><a href="intro.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)</span>
+<span id="cb3-3"><a href="intro.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ICC)</span>
+<span id="cb3-4"><a href="intro.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb3-5"><a href="intro.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pbkrtest)</span>
+<span id="cb3-6"><a href="intro.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb3-7"><a href="intro.html#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb3-8"><a href="intro.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjPlot)</span></code></pre></div>
+<!-- install packages in rmd is not a good idea. See https://community.rstudio.com/t/rmd-install-packages-best-practices/42591 -->
+<p>We start with reading the pCREB data (<strong>Example 1</strong>) into R. Because the data file is comma separated, we use the function “read.csv” to read it. The option “head=T” reads the first row as the column names. Most R packages of LME require the “long,” also known as “vertical” format, in which data
+are organized in a rectangular data matrix, i.e., each row of the dataset contains only the values for one observation. The columns contain necessary information about this observation such as the experimental condition, treatment, cell ID, and animal ID. In this example, the data are stored in a 1,200-by-3 matrix, with the first column being the pCREB immunoreactivity values, the second column being the treatment labels, and the last column being the animal identification numbers. The treatment information is in the second column and it is coded as labels 1 through 5: 1 for baseline (saline), 2-5 for 24, 48, 72 hours, and 1 week after ketamine treatment, respectively. By default, the treatment information is read into numerical values. To convert it to a categorical variable, we apply the “as.factor” function to the treatment variable.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="intro.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The following lines of code read the Example 1 data</span></span>
+<span id="cb4-2"><a href="intro.html#cb4-2" aria-hidden="true" tabindex="-1"></a>Ex1 <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://www.ics.uci.edu/~zhaoxia/Data/BeyondTandANOVA/Example1.txt&quot;</span>, <span class="at">head=</span>T)</span>
+<span id="cb4-3"><a href="intro.html#cb4-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb4-4"><a href="intro.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># checking the dimensions of the dataset</span></span>
+<span id="cb4-5"><a href="intro.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Ex1)</span></code></pre></div>
+<pre><code>## [1] 1200    3</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="intro.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># checking the names of each column</span></span>
+<span id="cb6-2"><a href="intro.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(Ex1)</span></code></pre></div>
+<pre><code>## [1] &quot;res&quot;           &quot;treatment_idx&quot; &quot;midx&quot;</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="intro.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a frequency table for the treatment variable</span></span>
+<span id="cb8-2"><a href="intro.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(Ex1<span class="sc">$</span>treatment_idx)</span></code></pre></div>
+<pre><code>## 
+##   1   2   3   4   5 
+## 357 309 139 150 245</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="intro.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Do not forget to factor the treatment IDs</span></span>
+<span id="cb10-2"><a href="intro.html#cb10-2" aria-hidden="true" tabindex="-1"></a>Ex1<span class="sc">$</span>treatment_idx <span class="ot">=</span> <span class="fu">as.factor</span>(Ex1<span class="sc">$</span>treatment_idx)</span></code></pre></div>
+<p>Next, we examine the magnitude of clustering due to animal effects by computing the ICC for each treatment group.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="intro.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">### load the ICC library</span></span>
+<span id="cb11-2"><a href="intro.html#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ICC) <span class="co">#load the library to conduct ICC analysis with its function ICCbare</span></span>
+<span id="cb11-3"><a href="intro.html#cb11-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-4"><a href="intro.html#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="do">### conduct ICC analysis by organizing all the information into a data frame</span></span>
+<span id="cb11-5"><a href="intro.html#cb11-5" aria-hidden="true" tabindex="-1"></a>icc.analysis<span class="ot">=</span><span class="fu">data.frame</span>(<span class="at">n=</span><span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">5</span>), <span class="at">icc=</span><span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">5</span>), <span class="at">design.effect=</span><span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">5</span>),</span>
+<span id="cb11-6"><a href="intro.html#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="at">effective.n=</span><span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">5</span>), <span class="at">M=</span><span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">5</span>), <span class="at">cells=</span><span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">5</span>))</span>
+<span id="cb11-7"><a href="intro.html#cb11-7" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-8"><a href="intro.html#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>){</span>
+<span id="cb11-9"><a href="intro.html#cb11-9" aria-hidden="true" tabindex="-1"></a>    trt<span class="ot">=</span> Ex1[Ex1<span class="sc">$</span>treatment_idx<span class="sc">==</span>i,]</span>
+<span id="cb11-10"><a href="intro.html#cb11-10" aria-hidden="true" tabindex="-1"></a>    trt<span class="sc">$</span>midx<span class="ot">=</span><span class="fu">factor</span>(trt<span class="sc">$</span>midx)</span>
+<span id="cb11-11"><a href="intro.html#cb11-11" aria-hidden="true" tabindex="-1"></a>    icc<span class="ot">=</span><span class="fu">ICCbare</span>(<span class="fu">factor</span>(trt<span class="sc">$</span>midx), trt<span class="sc">$</span>res) <span class="co">#ICCbare is a function in the ICC package</span></span>
+<span id="cb11-12"><a href="intro.html#cb11-12" aria-hidden="true" tabindex="-1"></a>    icc.analysis<span class="sc">$</span>cells[i]<span class="ot">=</span><span class="fu">dim</span>(trt)[<span class="dv">1</span>]</span>
+<span id="cb11-13"><a href="intro.html#cb11-13" aria-hidden="true" tabindex="-1"></a>    M<span class="ot">=</span><span class="fu">dim</span>(trt)[<span class="dv">1</span>]<span class="sc">/</span><span class="fu">length</span>(<span class="fu">unique</span>( trt<span class="sc">$</span>midx))</span>
+<span id="cb11-14"><a href="intro.html#cb11-14" aria-hidden="true" tabindex="-1"></a>    def<span class="ot">=</span><span class="dv">1</span> <span class="sc">+</span> icc<span class="sc">*</span>(M<span class="dv">-1</span>)</span>
+<span id="cb11-15"><a href="intro.html#cb11-15" aria-hidden="true" tabindex="-1"></a>    icc.analysis<span class="sc">$</span>n[i]<span class="ot">=</span><span class="fu">length</span>(<span class="fu">unique</span>( trt<span class="sc">$</span>midx))</span>
+<span id="cb11-16"><a href="intro.html#cb11-16" aria-hidden="true" tabindex="-1"></a>    icc.analysis<span class="sc">$</span>icc[i]<span class="ot">=</span>icc</span>
+<span id="cb11-17"><a href="intro.html#cb11-17" aria-hidden="true" tabindex="-1"></a>    icc.analysis<span class="sc">$</span>design.effect[i]<span class="ot">=</span>def</span>
+<span id="cb11-18"><a href="intro.html#cb11-18" aria-hidden="true" tabindex="-1"></a>    icc.analysis<span class="sc">$</span>effective.n[i]<span class="ot">=</span><span class="fu">dim</span>(trt)[<span class="dv">1</span>]<span class="sc">/</span>def</span>
+<span id="cb11-19"><a href="intro.html#cb11-19" aria-hidden="true" tabindex="-1"></a>    icc.analysis<span class="sc">$</span>M[i]<span class="ot">=</span>M</span>
+<span id="cb11-20"><a href="intro.html#cb11-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-21"><a href="intro.html#cb11-21" aria-hidden="true" tabindex="-1"></a>icc.analysis</span></code></pre></div>
+<pre><code>##   n        icc design.effect effective.n        M cells
+## 1 7 0.62094868     32.047434   11.139737 51.00000   357
+## 2 6 0.33006327     17.668195   17.489053 51.50000   309
+## 3 3 0.01780304      1.807071   76.920039 46.33333   139
+## 4 3 0.62810904     31.777343    4.720344 50.00000   150
+## 5 5 0.53694579     26.773398    9.150874 49.00000   245</code></pre>
+<p>The results are organized in the following table:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="intro.html#cb13-1" aria-hidden="true" tabindex="-1"></a>tmp<span class="ot">=</span><span class="fu">t</span>(icc.analysis[,<span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">2</span>)])</span>
+<span id="cb13-2"><a href="intro.html#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(tmp)<span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;# of cells&quot;</span>, <span class="st">&quot;ICC&quot;</span>)</span>
+<span id="cb13-3"><a href="intro.html#cb13-3" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb13-4"><a href="intro.html#cb13-4" aria-hidden="true" tabindex="-1"></a>  tmp,</span>
+<span id="cb13-5"><a href="intro.html#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Saline (7 mice)&quot;</span>,<span class="st">&quot;24h (6 mice)&quot;</span>,<span class="st">&quot;48h (3 mice)&quot;</span>,<span class="st">&quot;72h (3 mice)&quot;</span>,<span class="st">&quot;1wk (5 mice)&quot;</span>)</span>
+<span id="cb13-6"><a href="intro.html#cb13-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Saline (7 mice)</th>
+<th align="right">24h (6 mice)</th>
+<th align="right">48h (3 mice)</th>
+<th align="right">72h (3 mice)</th>
+<th align="right">1wk (5 mice)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"># of cells</td>
+<td align="right">357.0000000</td>
+<td align="right">309.0000000</td>
+<td align="right">139.000000</td>
+<td align="right">150.000000</td>
+<td align="right">245.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">ICC</td>
+<td align="right">0.6209487</td>
+<td align="right">0.3300633</td>
+<td align="right">0.017803</td>
+<td align="right">0.628109</td>
+<td align="right">0.5369458</td>
+</tr>
+</tbody>
+</table>
+<p>The ICC indicates that the dependency due to clustering is substantial. Therefore, the 1,200 neurons should not be treated as 1,200 independent cells. When dependence is not adequately accounted for, the type I error rate can be much higher than the pre-chosen level of significance. To see how serious this problem is, we examine the false positives based on the dependence structure observed in our own study. In the simulation script we wrote “simulation_TypeIErrorRate.R” (see download section above), we generated 1000 data sets, each of which follows the same ICC structure and assumes NO difference between the five conditions. Surprisingly, the type I error rate when treating 1,200 neurons as independent observations is over 90% at the significance level of <span class="math inline">\(\alpha=0.05\)</span>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="intro.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">### run the simulation script. It might take 1-2 minutes</span></span>
+<span id="cb14-2"><a href="intro.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;https://www.ics.uci.edu/~zhaoxia/Data/BeyondTandANOVA/simulation_TypeIErrorRate.R&quot;</span>)</span></code></pre></div>
+<p>This is a situation for which the number of observational units is much larger than the number of experimental units. We will show how to use a linear mixed-effects model to correctly analyze the data in the next section.</p>
+
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-bates2014fitting" class="csl-entry">
+Bates, Douglas, Martin Mächler, Ben Bolker, and Steve Walker. 2014. <span>“Fitting Linear Mixed-Effects Models Using Lme4.”</span> <em>arXiv Preprint arXiv:1406.5823</em>.
+</div>
+<div id="ref-burkner2017advanced" class="csl-entry">
+Bürkner, Paul-Christian. 2017a. <span>“Advanced Bayesian Multilevel Modeling with the r Package Brms.”</span> <em>arXiv Preprint arXiv:1705.11123</em>.
+</div>
+<div id="ref-burkner2017brms" class="csl-entry">
+———. 2017b. <span>“Brms: An r Package for Bayesian Multilevel Models Using Stan.”</span> <em>Journal of Statistical Software</em> 80: 1–28.
+</div>
+<div id="ref-fox2018r" class="csl-entry">
+Fox, John, and Sanford Weisberg. 2018. <em>An r Companion to Applied Regression</em>. Sage publications.
+</div>
+<div id="ref-grieco2020subanesthetic" class="csl-entry">
+Grieco, Steven F, Xin Qiao, Xiaoting Zheng, Yongjun Liu, Lujia Chen, Hai Zhang, Zhaoxia Yu, et al. 2020. <span>“Subanesthetic Ketamine Reactivates Adult Cortical Plasticity to Restore Vision from Amblyopia.”</span> <em>Current Biology</em> 30 (18): 3591–3603.
+</div>
+<div id="ref-halekoh2014kenward" class="csl-entry">
+Halekoh, Ulrich, and Søren Højsgaard. 2014. <span>“A Kenward-Roger Approximation and Parametric Bootstrap Methods for Tests in Linear Mixed Models–the r Package Pbkrtest.”</span> <em>Journal of Statistical Software</em> 59: 1–32.
+</div>
+<div id="ref-kuznetsova2017lmertest" class="csl-entry">
+Kuznetsova, Alexandra, Per B Brockhoff, and Rune HB Christensen. 2017. <span>“lmerTest Package: Tests in Linear Mixed Effects Models.”</span> <em>Journal of Statistical Software</em> 82: 1–26.
+</div>
+<div id="ref-lenth2019estimated" class="csl-entry">
+Lenth, R, H Singmann, J Love, P Buerkner, and M Herve. 2019. <span>“Estimated Marginal Means, Aka Least-Squares Means. R Package Version 1.3. 2.”</span>
+</div>
+<div id="ref-ludecke2018sjplot" class="csl-entry">
+Lüdecke, Daniel. 2018. <span>“sjPlot: Data Visualization for Statistics in Social Science.”</span> <em>R Package Version</em> 2 (1).
+</div>
+<div id="ref-pinheiro2007linear" class="csl-entry">
+Pinheiro, Jose, Douglas Bates, Saikat DebRoy, Deepayan Sarkar, and R Core Team. 2007. <span>“Linear and Nonlinear Mixed Effects Models.”</span> <em>R Package Version</em> 3 (57): 1–89.
+</div>
+<div id="ref-wolak2015package" class="csl-entry">
+Wolak, Matthew, and Maintainer Matthew Wolak. 2015. <span>“Package <span>‘ICC’</span>.”</span> <em>Facilitating Estimation of the Intraclass Correlation Coefficient</em>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="mixed-effects-model-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["mm-in-neuroscience.pdf", "mm-in-neuroscience.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

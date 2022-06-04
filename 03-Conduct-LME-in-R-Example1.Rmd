@@ -1,0 +1,119 @@
+# Conduct LME in R: Example 1
+
+__nlme__ and __lme4__ are the two most popular R packages for LME analysis. Besides the use of slightly different syntaxes for random effects, their main functions do differ in several other ways, such as their flexibility for modeling different types of outcomes, how they handle heteroscedasticity, the covariance structure of random effects, crossed random effects, and their approximations for test statistics. A full description of these differences is beyond the scope of this article. We refer interested readers instead to the documentation for each of the two packages. Next, we show how to analyze Examples 1-3 using linear mixed effects models.
+
+## Wrong analysis with lm or anova
+__Example 1__. The data have been described in Part I. We first fit a conventional linear model using the _lm_ function, which erroneously pools all the neurons together and treats them as independent observations.
+
+```{r}
+################ Wrong analysis ####################
+#Wrong analysis: using the linear model
+obj.lm=lm(res~treatment_idx, data=Ex1)
+summary(obj.lm)
+summary(obj.lm)$coefficients
+anova(obj.lm)
+anova(obj.lm)[1,5]
+#wrong analysis: use ANOVA
+obj.aov=aov(res~treatment_idx, data=Ex1)
+summary(obj.aov)
+```
+
+In this example, the parameters of major interest are the coefficients of the treatments (1: baseline; 2: 24 hours; 3: 48 hours; 4: 72 hours; 5: 1 week following treatment). The summary function of the _lm_ object provides the estimates, standard error, t statistics, and p-values for each time point after the treatment, with the before treatment measurement used as the reference. The overall significance of the treatment factor is performed using an F test, which is available in the ANOVA table by applying the anova function to the _lm_ object. Equivalently, one can also use the aov function to obtain the same ANOVA table.
+
+## LME: estimation methods
+As explained in Part I, ignoring the dependency due to clustering can lead to unacceptably high type I error rates. We next fit a linear mixed effects model by including animal-specific means. This can be done using either _nlme::lme_ (the _lme_ function in the __nlme__ package) or _lme4::lmer_ (the _lmer_ function in the __lme4__ package), as shown below
+
+```{r}
+################## Linear Mixed-effects Model ###########################
+#use nlme::lme
+library(nlme) #load the nlme library
+# The nlme:lme function specifies the fixed effects in the formula
+# (first argument) of the function, and the random effects
+# as an optional argument (random=). The vertical bar | denotes that
+# the cluster is done through the animal id (midx)
+obj.lme=lme(res~treatment_idx, data= Ex1, random = ~ 1|midx)
+summary(obj.lme)
+
+#use lme4::lmer
+library(lme4) #load the lme4 library
+ 
+# The nlme:lme4 adds the random effects directly in the
+# formula (first argument) of the function
+obj.lmer=lmer(res ~ treatment_idx+(1|midx), data=Ex1)
+summary(obj.lmer)
+```
+
+__On the method of parameter estimation for LME__. Note that _lme_ and _lmer_ produce exactly the same coefficients, standard errors, and t statistics. By default, the _lme_ and _lmer_ function estimate parameters using a REML procedure. Estimation of the population parameters in LME is often conducted using maximum likelihood (ML) or REML, where REML stands for the restricted (or residual, or reduced) maximum likelihood. While the name REML sounds confusing, REML obtains unbiased estimators for the variances by accounting for the fact that some information from the data is used for estimating the fixed effects parameters. A helpful analogy is the estimation of the population variance by the maximum likelihood estimator $\sum_{i=1}^n (x_i-\bar x)^2/n$, which is biased, or an unbiased estimator $\sum_{i=1}^n (x_i-\bar x)^2/(n-1)$. This strategy is helpful when $n$ is small.
+
+## On the degrees of freedom and P-values
+A noticeable difference between the _lme_ and _lmer_ outputs is that p-values are provided by _lme_ but not _lmer_. The calculation of p-values in _lme_ uses the degrees of freedom according to “the grouping level at which the term is estimated” (@pinheiro2006mixed), which is the animal level in __Example 1__. However, the calculation of the degrees of freedom for a fixed model is not as straightforward as for a linear model (see the link [here](https://stat.ethz.ch/pipermail/r-help/2006-May/094765.html) for some details). Several packages use more accurate approximations or bootstrap methods to improve the accuracy of p-values. In the following, we show different methods to compute __(1) the overall p-value of the treatment factor, (2) p-values for individual treatments, and (3) p-value adjustment for multiple comparisons__. These p-values are for testing the fixed effects. We defer the discussion related to random effects until __Example 3__.
+
+## The overall p-value for the treatment factor vs p-values for individual treatments
+__The overall p-value for the treatment factor__. This p-value aims to understand whether there is any statistically significant difference among a set of treatments. We offer several ways to calculate this type of p-values. When assessing the overall treatment effects using a likelihood ratio test, one should use maximum likelihood, rather than REML, when using _lme_ or _lmer_.
+```{r}
+#overall p-value from lme
+#Wald F-test from an lme object
+obj.lme=lme(res~treatment_idx, data= Ex1, random = ~ 1|midx)
+anova(obj.lme) #Wald F-test
+#Likelihood ratio test from lme objects
+# notice the argument of the option “method”
+# which calls for using ML instead of REML
+obj.lme0.ml=lme(res~1, data= Ex1, random = ~ 1|midx, method="ML")
+obj.lme.ml=lme(res~treatment_idx, data= Ex1, random = ~ 1|midx, method="ML")
+anova(obj.lme0.ml, obj.lme.ml)
+#equivalently, one can conduct LRT using drop1
+drop1(obj.lme.ml, test="Chisq")
+```
+
+As noted earlier, p-values are not provided for the overall effect or individual treatments by the lmer function in the lme4 package. Next, we show how to use the lmerTest package to calculate p-values.
+```{r}
+library(lmerTest)
+obj.lmer=lmerTest::lmer(res ~ treatment_idx+(1|midx), data=Ex1)
+#when ddf is not specified, the F test with Satterthwaite's method will be use
+anova(obj.lmer, ddf="Kenward-Roger")
+#likelihood ratio test
+obj.lmer.ml=lme4::lmer(res ~ treatment_idx+(1|midx), data=Ex1, REML=F)
+obj.lmer0.ml=lme4::lmer(res ~ 1+(1|midx), data=Ex1, REML=F)
+anova(obj.lmer0.ml, obj.lmer.ml)
+#drop1(obj.lmer.ml, test="Chisq") also works
+```
+
+Remarks: (i) Since the function _lmer_ is in both __nlme__ and __lmerTest__, to ensure that the _lmer_ from lmerTest is used, we specify the package name by using double colon: _lmerTest::lmer_. (ii) The default method of calculating the denominator degrees of freedom is Satterwhite’s method. One can use the option ddf to choose the Kenward-Roger method, which is often preferred by many researchers. (iii) Based on the simulation studies in (@pinheiro2006mixed), F tests usually perform better than likelihood ratio tests.
+
+__P-values for individual treatments__. The effects of individual treatments are also of great interest. As shown earlier, the individual p-values from _nlme::lme_ can be obtained by using the summary function. Similarly, one can also obtain individual p-values by using the lmerTest package for a model fit by _lmer_.
+```{r}
+obj.lmer=lmerTest::lmer(res ~ treatment_idx+(1|midx), data=Ex1)
+#summary(obj.lmer) #Sattertwhaite's method for denominator degrees of freedom
+summary(obj.lmer, ddf="Kenward-Roger")
+```
+
+## P-value adjustment for multiple comparisons
+Note that the individual p-values shown above are for the comparison between each treatment group and the control group. Multiple comparisons have not been considered so far. Once a model is fit and an overall significance has been established, a natural question is which treatments are different from each other among a set of treatments. Consider Example 1, which involves five experimental conditions. The number of comparisons to examine all pairs of conditions is 10. When using unadjusted p-values and conducting testing at significance level $\alpha =0.05$, the chance that we will make at least one false positive is much greater than 5%. The __emmeans__ package can be used to adjust p-values by taking multiple comparisons into consideration. Two useful options are (i) the adjustment of multiple comparisons for all pairs of treatment by adding “pairwise” and (ii) the adjustment for comparisons for all the treatments to the control by adding “trt.vs.ctrl” and specifying the reference group, which is group “1” in this example.
+```{r}
+library(emmeans)
+obj.lmer=lme4::lmer(res ~ treatment_idx+(1|midx), data=Ex1)
+contrast(emmeans(obj.lmer, specs="treatment_idx"), "pairwise")
+# the default method of degrees of freedom is Kenward-Roger’s method
+contrast(emmeans(obj.lmer, specs="treatment_idx"), "trt.vs.ctrl", ref = "1")
+```
+In the pairwise adjustment for Example 1, one examines all the ten pairs, listed as “1-2”, $\cdots$, “4-5”. When only the difference between each of the four treatments and the control is of interest, the number of comparisons reduced to four. As a result, the adjusted p-values for all pairs are less significant than the adjusted p-values based on “trt.vs.ctrl”.
+
+## Robust methods with parametric bootstrap
+Instead of relying on large-sample distributions or approximations based on F distributions, the __pbkrtest__ package provides a parametric bootstrap test to compare two models, as shown below. Resampling methods, such as bootstrap, are often believed to be more robust than their parametric counterparts.
+```{r, eval=FALSE}
+library(pbkrtest)
+obj.lmer=lmerTest::lmer(res ~ treatment_idx+(1|midx), data=Ex1)
+obj.lmer0=lmerTest::lmer(res ~ 1+(1|midx), data=Ex1)
+#the following code might take a few minutes
+PBmodcomp(obj.lmer, obj.lmer0)
+```
+## Additional tools 
+There are other potentially useful alternative functions, such as _car::Anova_, and _sjPlot::plot_scatter_, _sjPlot::plot_model_. We provide sample code and encourage interested readers to continue exploring these packages if they wish to compare additional tools.
+```{r, cache=TRUE}
+library(car) #load the car library
+library(sjPlot) #load the sjPlot library
+obj.lmer=lme4::lmer(res ~ treatment_idx+(1|midx), data=Ex1)
+car::Anova(obj.lmer, test.statistic="F")
+sjPlot::plot_model(obj.lmer)
+plot_scatter(Ex1, midx, res, treatment_idx)
+```

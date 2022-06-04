@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Conduct LME in R: Example 1 | Mixed-effects model and its application in neuroscience</title>
+  <meta name="description" content="This is the online supplemental to accomany Yu Z, Guindani M, Grieco SF, Chen L, Holmes TC, Xu X. (2022) Beyond t-Test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron. 110: 21-23." />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Conduct LME in R: Example 1 | Mixed-effects model and its application in neuroscience" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This is the online supplemental to accomany Yu Z, Guindani M, Grieco SF, Chen L, Holmes TC, Xu X. (2022) Beyond t-Test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron. 110: 21-23." />
+  <meta name="github-repo" content="rstudio/mm-in-neuroscience" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Conduct LME in R: Example 1 | Mixed-effects model and its application in neuroscience" />
+  
+  <meta name="twitter:description" content="This is the online supplemental to accomany Yu Z, Guindani M, Grieco SF, Chen L, Holmes TC, Xu X. (2022) Beyond t-Test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron. 110: 21-23." />
+  
+
+<meta name="author" content="Zhaoxia Yu, Michele Guindani, Steven F. Grieco, Lujia Chen, Todd C. Holmes, Xiangmin Xu" />
+
+
+<meta name="date" content="2022-06-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="mixed-effects-model-analysis.html"/>
+<link rel="next" href="conduct-lme-in-r-example-2.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Application of Mixed-effects Model in Neuroscience</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Supplemental data download</a></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="3" data-path="mixed-effects-model-analysis.html"><a href="mixed-effects-model-analysis.html"><i class="fa fa-check"></i><b>3</b> Mixed-effects model analysis</a></li>
+<li class="chapter" data-level="4" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html"><i class="fa fa-check"></i><b>4</b> Conduct LME in R: Example 1</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#wrong-analysis-with-lm-or-anova"><i class="fa fa-check"></i><b>4.1</b> Wrong analysis with lm or anova</a></li>
+<li class="chapter" data-level="4.2" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#lme-estimation-methods"><i class="fa fa-check"></i><b>4.2</b> LME: estimation methods</a></li>
+<li class="chapter" data-level="4.3" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#on-the-degrees-of-freedom-and-p-values"><i class="fa fa-check"></i><b>4.3</b> On the degrees of freedom and P-values</a></li>
+<li class="chapter" data-level="4.4" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#the-overall-p-value-for-the-treatment-factor-vs-p-values-for-individual-treatments"><i class="fa fa-check"></i><b>4.4</b> The overall p-value for the treatment factor vs p-values for individual treatments</a></li>
+<li class="chapter" data-level="4.5" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#p-value-adjustment-for-multiple-comparisons"><i class="fa fa-check"></i><b>4.5</b> P-value adjustment for multiple comparisons</a></li>
+<li class="chapter" data-level="4.6" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#robust-methods-with-parametric-bootstrap"><i class="fa fa-check"></i><b>4.6</b> Robust methods with parametric bootstrap</a></li>
+<li class="chapter" data-level="4.7" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#additional-tools"><i class="fa fa-check"></i><b>4.7</b> Additional tools</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html"><i class="fa fa-check"></i><b>5</b> Conduct LME in R: Example 2</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#wrong-analysis"><i class="fa fa-check"></i><b>5.1</b> Wrong analysis</a></li>
+<li class="chapter" data-level="5.2" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#lme"><i class="fa fa-check"></i><b>5.2</b> LME</a></li>
+<li class="chapter" data-level="5.3" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#why-pooling-data-naively-is-not-a-good-idea"><i class="fa fa-check"></i><b>5.3</b> Why pooling data naively is not a good idea?</a></li>
+<li class="chapter" data-level="5.4" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#remark-on-the-minimum-number-of-levels-for-using-random-effects"><i class="fa fa-check"></i><b>5.4</b> Remark: on the minimum number of levels for using random-effects</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html"><i class="fa fa-check"></i><b>6</b> Conduct LME in R: Example 3</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#wrong-analysis-with-lm-paired-or-unpaired-t-test"><i class="fa fa-check"></i><b>6.1</b> Wrong analysis with lm, paired or unpaired t-test</a></li>
+<li class="chapter" data-level="6.2" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#a-note-on-nested-random-effects"><i class="fa fa-check"></i><b>6.2</b> A note on “nested” random effects</a></li>
+<li class="chapter" data-level="6.3" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#on-models-with-more-random-effects"><i class="fa fa-check"></i><b>6.3</b> On models with more random effects</a></li>
+<li class="chapter" data-level="6.4" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#a-note-on-the-testing-of-random-effects."><i class="fa fa-check"></i><b>6.4</b> A note on the testing of random-effects.</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="generalized-linear-mixed-effects-models-and-example-4.html"><a href="generalized-linear-mixed-effects-models-and-example-4.html"><i class="fa fa-check"></i><b>7</b> Generalized Linear Mixed-Effects Models and Example 4</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="generalized-linear-mixed-effects-models-and-example-4.html"><a href="generalized-linear-mixed-effects-models-and-example-4.html#fit-a-glmm-in-r"><i class="fa fa-check"></i><b>7.1</b> Fit a GLMM in R</a></li>
+<li class="chapter" data-level="7.2" data-path="generalized-linear-mixed-effects-models-and-example-4.html"><a href="generalized-linear-mixed-effects-models-and-example-4.html#use-nonparametric-methods-to-produce-more-accurate-p-values"><i class="fa fa-check"></i><b>7.2</b> Use nonparametric methods to produce more accurate p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="a-bayesian-analysis-of-example-4.html"><a href="a-bayesian-analysis-of-example-4.html"><i class="fa fa-check"></i><b>8</b> A Bayesian Analysis of Example 4</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Mixed-effects model and its application in neuroscience</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="conduct-lme-in-r-example-1" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Conduct LME in R: Example 1<a href="conduct-lme-in-r-example-1.html#conduct-lme-in-r-example-1" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><strong>nlme</strong> and <strong>lme4</strong> are the two most popular R packages for LME analysis. Besides the use of slightly different syntaxes for random effects, their main functions do differ in several other ways, such as their flexibility for modeling different types of outcomes, how they handle heteroscedasticity, the covariance structure of random effects, crossed random effects, and their approximations for test statistics. A full description of these differences is beyond the scope of this article. We refer interested readers instead to the documentation for each of the two packages. Next, we show how to analyze Examples 1-3 using linear mixed effects models.</p>
+<div id="wrong-analysis-with-lm-or-anova" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Wrong analysis with lm or anova<a href="conduct-lme-in-r-example-1.html#wrong-analysis-with-lm-or-anova" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Example 1</strong>. The data have been described in Part I. We first fit a conventional linear model using the <em>lm</em> function, which erroneously pools all the neurons together and treats them as independent observations.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="conduct-lme-in-r-example-1.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">################ Wrong analysis ####################</span></span>
+<span id="cb16-2"><a href="conduct-lme-in-r-example-1.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Wrong analysis: using the linear model</span></span>
+<span id="cb16-3"><a href="conduct-lme-in-r-example-1.html#cb16-3" aria-hidden="true" tabindex="-1"></a>obj.lm<span class="ot">=</span><span class="fu">lm</span>(res<span class="sc">~</span>treatment_idx, <span class="at">data=</span>Ex1)</span>
+<span id="cb16-4"><a href="conduct-lme-in-r-example-1.html#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj.lm)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = res ~ treatment_idx, data = Ex1)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.7076 -0.5283 -0.1801  0.3816  5.1378 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     1.02619    0.03997  25.672  &lt; 2e-16 ***
+## treatment_idx2  0.78286    0.05868  13.340  &lt; 2e-16 ***
+## treatment_idx3  0.81353    0.07551  10.774  &lt; 2e-16 ***
+## treatment_idx4  0.16058    0.07349   2.185   0.0291 *  
+## treatment_idx5 -0.36047    0.06266  -5.753 1.11e-08 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7553 on 1195 degrees of freedom
+## Multiple R-squared:  0.2657, Adjusted R-squared:  0.2632 
+## F-statistic: 108.1 on 4 and 1195 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="conduct-lme-in-r-example-1.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj.lm)<span class="sc">$</span>coefficients</span></code></pre></div>
+<pre><code>##                  Estimate Std. Error   t value      Pr(&gt;|t|)
+## (Intercept)     1.0261907 0.03997259 25.672363 4.064778e-116
+## treatment_idx2  0.7828564 0.05868406 13.340189  6.040147e-38
+## treatment_idx3  0.8135287 0.07550847 10.774006  6.760583e-26
+## treatment_idx4  0.1605790 0.07348870  2.185084  2.907634e-02
+## treatment_idx5 -0.3604732 0.06265813 -5.753015  1.112796e-08</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="conduct-lme-in-r-example-1.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(obj.lm)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: res
+##                 Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## treatment_idx    4 246.62  61.656  108.09 &lt; 2.2e-16 ***
+## Residuals     1195 681.65   0.570                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="conduct-lme-in-r-example-1.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(obj.lm)[<span class="dv">1</span>,<span class="dv">5</span>]</span></code></pre></div>
+<pre><code>## [1] 1.17392e-78</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="conduct-lme-in-r-example-1.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#wrong analysis: use ANOVA</span></span>
+<span id="cb24-2"><a href="conduct-lme-in-r-example-1.html#cb24-2" aria-hidden="true" tabindex="-1"></a>obj.aov<span class="ot">=</span><span class="fu">aov</span>(res<span class="sc">~</span>treatment_idx, <span class="at">data=</span>Ex1)</span>
+<span id="cb24-3"><a href="conduct-lme-in-r-example-1.html#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj.aov)</span></code></pre></div>
+<pre><code>##                 Df Sum Sq Mean Sq F value Pr(&gt;F)    
+## treatment_idx    4  246.6   61.66   108.1 &lt;2e-16 ***
+## Residuals     1195  681.6    0.57                   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>In this example, the parameters of major interest are the coefficients of the treatments (1: baseline; 2: 24 hours; 3: 48 hours; 4: 72 hours; 5: 1 week following treatment). The summary function of the <em>lm</em> object provides the estimates, standard error, t statistics, and p-values for each time point after the treatment, with the before treatment measurement used as the reference. The overall significance of the treatment factor is performed using an F test, which is available in the ANOVA table by applying the anova function to the <em>lm</em> object. Equivalently, one can also use the aov function to obtain the same ANOVA table.</p>
+</div>
+<div id="lme-estimation-methods" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> LME: estimation methods<a href="conduct-lme-in-r-example-1.html#lme-estimation-methods" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As explained in Part I, ignoring the dependency due to clustering can lead to unacceptably high type I error rates. We next fit a linear mixed effects model by including animal-specific means. This can be done using either <em>nlme::lme</em> (the <em>lme</em> function in the <strong>nlme</strong> package) or <em>lme4::lmer</em> (the <em>lmer</em> function in the <strong>lme4</strong> package), as shown below</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="conduct-lme-in-r-example-1.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="do">################## Linear Mixed-effects Model ###########################</span></span>
+<span id="cb26-2"><a href="conduct-lme-in-r-example-1.html#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#use nlme::lme</span></span>
+<span id="cb26-3"><a href="conduct-lme-in-r-example-1.html#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme) <span class="co">#load the nlme library</span></span>
+<span id="cb26-4"><a href="conduct-lme-in-r-example-1.html#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The nlme:lme function specifies the fixed effects in the formula</span></span>
+<span id="cb26-5"><a href="conduct-lme-in-r-example-1.html#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (first argument) of the function, and the random effects</span></span>
+<span id="cb26-6"><a href="conduct-lme-in-r-example-1.html#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co"># as an optional argument (random=). The vertical bar | denotes that</span></span>
+<span id="cb26-7"><a href="conduct-lme-in-r-example-1.html#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># the cluster is done through the animal id (midx)</span></span>
+<span id="cb26-8"><a href="conduct-lme-in-r-example-1.html#cb26-8" aria-hidden="true" tabindex="-1"></a>obj.lme<span class="ot">=</span><span class="fu">lme</span>(res<span class="sc">~</span>treatment_idx, <span class="at">data=</span> Ex1, <span class="at">random =</span> <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span>midx)</span>
+<span id="cb26-9"><a href="conduct-lme-in-r-example-1.html#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj.lme)</span></code></pre></div>
+<pre><code>## Linear mixed-effects model fit by REML
+##   Data: Ex1 
+##        AIC      BIC    logLik
+##   2278.466 2314.067 -1132.233
+## 
+## Random effects:
+##  Formula: ~1 | midx
+##         (Intercept)  Residual
+## StdDev:   0.5127092 0.5995358
+## 
+## Fixed effects:  res ~ treatment_idx 
+##                     Value Std.Error   DF   t-value p-value
+## (Intercept)     1.0006729 0.1963782 1176  5.095642  0.0000
+## treatment_idx2  0.8194488 0.2890372   19  2.835098  0.0106
+## treatment_idx3  0.8429473 0.3588556   19  2.348988  0.0298
+## treatment_idx4  0.1898432 0.3586083   19  0.529389  0.6027
+## treatment_idx5 -0.3199877 0.3043369   19 -1.051426  0.3063
+##  Correlation: 
+##                (Intr) trtm_2 trtm_3 trtm_4
+## treatment_idx2 -0.679                     
+## treatment_idx3 -0.547  0.372              
+## treatment_idx4 -0.548  0.372  0.300       
+## treatment_idx5 -0.645  0.438  0.353  0.353
+## 
+## Standardized Within-Group Residuals:
+##        Min         Q1        Med         Q3        Max 
+## -2.5388279 -0.5761356 -0.1128839  0.4721228  8.8600545 
+## 
+## Number of Observations: 1200
+## Number of Groups: 24</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="conduct-lme-in-r-example-1.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#use lme4::lmer</span></span>
+<span id="cb28-2"><a href="conduct-lme-in-r-example-1.html#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4) <span class="co">#load the lme4 library</span></span>
+<span id="cb28-3"><a href="conduct-lme-in-r-example-1.html#cb28-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb28-4"><a href="conduct-lme-in-r-example-1.html#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The nlme:lme4 adds the random effects directly in the</span></span>
+<span id="cb28-5"><a href="conduct-lme-in-r-example-1.html#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># formula (first argument) of the function</span></span>
+<span id="cb28-6"><a href="conduct-lme-in-r-example-1.html#cb28-6" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb28-7"><a href="conduct-lme-in-r-example-1.html#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj.lmer)</span></code></pre></div>
+<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+## Formula: res ~ treatment_idx + (1 | midx)
+##    Data: Ex1
+## 
+## REML criterion at convergence: 2264.5
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.5388 -0.5761 -0.1129  0.4721  8.8601 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  midx     (Intercept) 0.2629   0.5127  
+##  Residual             0.3594   0.5995  
+## Number of obs: 1200, groups:  midx, 24
+## 
+## Fixed effects:
+##                Estimate Std. Error t value
+## (Intercept)      1.0007     0.1964   5.096
+## treatment_idx2   0.8194     0.2890   2.835
+## treatment_idx3   0.8429     0.3589   2.349
+## treatment_idx4   0.1898     0.3586   0.529
+## treatment_idx5  -0.3200     0.3043  -1.051
+## 
+## Correlation of Fixed Effects:
+##             (Intr) trtm_2 trtm_3 trtm_4
+## tretmnt_dx2 -0.679                     
+## tretmnt_dx3 -0.547  0.372              
+## tretmnt_dx4 -0.548  0.372  0.300       
+## tretmnt_dx5 -0.645  0.438  0.353  0.353</code></pre>
+<p><strong>On the method of parameter estimation for LME</strong>. Note that <em>lme</em> and <em>lmer</em> produce exactly the same coefficients, standard errors, and t statistics. By default, the <em>lme</em> and <em>lmer</em> function estimate parameters using a REML procedure. Estimation of the population parameters in LME is often conducted using maximum likelihood (ML) or REML, where REML stands for the restricted (or residual, or reduced) maximum likelihood. While the name REML sounds confusing, REML obtains unbiased estimators for the variances by accounting for the fact that some information from the data is used for estimating the fixed effects parameters. A helpful analogy is the estimation of the population variance by the maximum likelihood estimator <span class="math inline">\(\sum_{i=1}^n (x_i-\bar x)^2/n\)</span>, which is biased, or an unbiased estimator <span class="math inline">\(\sum_{i=1}^n (x_i-\bar x)^2/(n-1)\)</span>. This strategy is helpful when <span class="math inline">\(n\)</span> is small.</p>
+</div>
+<div id="on-the-degrees-of-freedom-and-p-values" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> On the degrees of freedom and P-values<a href="conduct-lme-in-r-example-1.html#on-the-degrees-of-freedom-and-p-values" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A noticeable difference between the <em>lme</em> and <em>lmer</em> outputs is that p-values are provided by <em>lme</em> but not <em>lmer</em>. The calculation of p-values in <em>lme</em> uses the degrees of freedom according to “the grouping level at which the term is estimated” (<span class="citation"><a href="#ref-pinheiro2006mixed" role="doc-biblioref">José Pinheiro and Bates</a> (<a href="#ref-pinheiro2006mixed" role="doc-biblioref">2006</a>)</span>), which is the animal level in <strong>Example 1</strong>. However, the calculation of the degrees of freedom for a fixed model is not as straightforward as for a linear model (see the link <a href="https://stat.ethz.ch/pipermail/r-help/2006-May/094765.html">here</a> for some details). Several packages use more accurate approximations or bootstrap methods to improve the accuracy of p-values. In the following, we show different methods to compute <strong>(1) the overall p-value of the treatment factor, (2) p-values for individual treatments, and (3) p-value adjustment for multiple comparisons</strong>. These p-values are for testing the fixed effects. We defer the discussion related to random effects until <strong>Example 3</strong>.</p>
+</div>
+<div id="the-overall-p-value-for-the-treatment-factor-vs-p-values-for-individual-treatments" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> The overall p-value for the treatment factor vs p-values for individual treatments<a href="conduct-lme-in-r-example-1.html#the-overall-p-value-for-the-treatment-factor-vs-p-values-for-individual-treatments" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>The overall p-value for the treatment factor</strong>. This p-value aims to understand whether there is any statistically significant difference among a set of treatments. We offer several ways to calculate this type of p-values. When assessing the overall treatment effects using a likelihood ratio test, one should use maximum likelihood, rather than REML, when using <em>lme</em> or <em>lmer</em>.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="conduct-lme-in-r-example-1.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#overall p-value from lme</span></span>
+<span id="cb30-2"><a href="conduct-lme-in-r-example-1.html#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Wald F-test from an lme object</span></span>
+<span id="cb30-3"><a href="conduct-lme-in-r-example-1.html#cb30-3" aria-hidden="true" tabindex="-1"></a>obj.lme<span class="ot">=</span><span class="fu">lme</span>(res<span class="sc">~</span>treatment_idx, <span class="at">data=</span> Ex1, <span class="at">random =</span> <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span>midx)</span>
+<span id="cb30-4"><a href="conduct-lme-in-r-example-1.html#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(obj.lme) <span class="co">#Wald F-test</span></span></code></pre></div>
+<pre><code>##               numDF denDF  F-value p-value
+## (Intercept)       1  1176 142.8589  &lt;.0001
+## treatment_idx     4    19   4.6878  0.0084</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="conduct-lme-in-r-example-1.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Likelihood ratio test from lme objects</span></span>
+<span id="cb32-2"><a href="conduct-lme-in-r-example-1.html#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># notice the argument of the option “method”</span></span>
+<span id="cb32-3"><a href="conduct-lme-in-r-example-1.html#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># which calls for using ML instead of REML</span></span>
+<span id="cb32-4"><a href="conduct-lme-in-r-example-1.html#cb32-4" aria-hidden="true" tabindex="-1"></a>obj.lme0.ml<span class="ot">=</span><span class="fu">lme</span>(res<span class="sc">~</span><span class="dv">1</span>, <span class="at">data=</span> Ex1, <span class="at">random =</span> <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span>midx, <span class="at">method=</span><span class="st">&quot;ML&quot;</span>)</span>
+<span id="cb32-5"><a href="conduct-lme-in-r-example-1.html#cb32-5" aria-hidden="true" tabindex="-1"></a>obj.lme.ml<span class="ot">=</span><span class="fu">lme</span>(res<span class="sc">~</span>treatment_idx, <span class="at">data=</span> Ex1, <span class="at">random =</span> <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span>midx, <span class="at">method=</span><span class="st">&quot;ML&quot;</span>)</span>
+<span id="cb32-6"><a href="conduct-lme-in-r-example-1.html#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(obj.lme0.ml, obj.lme.ml)</span></code></pre></div>
+<pre><code>##             Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+## obj.lme0.ml     1  3 2281.441 2296.712 -1137.721                        
+## obj.lme.ml      2  7 2272.961 2308.592 -1129.481 1 vs 2 16.48011  0.0024</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="conduct-lme-in-r-example-1.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#equivalently, one can conduct LRT using drop1</span></span>
+<span id="cb34-2"><a href="conduct-lme-in-r-example-1.html#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(obj.lme.ml, <span class="at">test=</span><span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## res ~ treatment_idx
+##               Df    AIC   LRT Pr(&gt;Chi)   
+## &lt;none&gt;           2273.0                  
+## treatment_idx  4 2281.4 16.48 0.002438 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>As noted earlier, p-values are not provided for the overall effect or individual treatments by the lmer function in the lme4 package. Next, we show how to use the lmerTest package to calculate p-values.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="conduct-lme-in-r-example-1.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmerTest)</span></code></pre></div>
+<pre><code>## Warning: package &#39;lmerTest&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lmerTest&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:lme4&#39;:
+## 
+##     lmer</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     step</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="conduct-lme-in-r-example-1.html#cb41-1" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lmerTest<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb41-2"><a href="conduct-lme-in-r-example-1.html#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co">#when ddf is not specified, the F test with Satterthwaite&#39;s method will be use</span></span>
+<span id="cb41-3"><a href="conduct-lme-in-r-example-1.html#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(obj.lmer, <span class="at">ddf=</span><span class="st">&quot;Kenward-Roger&quot;</span>)</span></code></pre></div>
+<pre><code>## Type III Analysis of Variance Table with Kenward-Roger&#39;s method
+##               Sum Sq Mean Sq NumDF  DenDF F value   Pr(&gt;F)   
+## treatment_idx   6.74   1.685     4 19.014  4.6878 0.008398 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="conduct-lme-in-r-example-1.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#likelihood ratio test</span></span>
+<span id="cb43-2"><a href="conduct-lme-in-r-example-1.html#cb43-2" aria-hidden="true" tabindex="-1"></a>obj.lmer.ml<span class="ot">=</span>lme4<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1, <span class="at">REML=</span>F)</span>
+<span id="cb43-3"><a href="conduct-lme-in-r-example-1.html#cb43-3" aria-hidden="true" tabindex="-1"></a>obj.lmer0.ml<span class="ot">=</span>lme4<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> <span class="dv">1</span><span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1, <span class="at">REML=</span>F)</span>
+<span id="cb43-4"><a href="conduct-lme-in-r-example-1.html#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(obj.lmer0.ml, obj.lmer.ml)</span></code></pre></div>
+<pre><code>## Data: Ex1
+## Models:
+## obj.lmer0.ml: res ~ 1 + (1 | midx)
+## obj.lmer.ml: res ~ treatment_idx + (1 | midx)
+##              npar    AIC    BIC  logLik deviance Chisq Df Pr(&gt;Chisq)   
+## obj.lmer0.ml    3 2281.4 2296.7 -1137.7   2275.4                       
+## obj.lmer.ml     7 2273.0 2308.6 -1129.5   2259.0 16.48  4   0.002438 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="conduct-lme-in-r-example-1.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#drop1(obj.lmer.ml, test=&quot;Chisq&quot;) also works</span></span></code></pre></div>
+<p>Remarks: (i) Since the function <em>lmer</em> is in both <strong>nlme</strong> and <strong>lmerTest</strong>, to ensure that the <em>lmer</em> from lmerTest is used, we specify the package name by using double colon: <em>lmerTest::lmer</em>. (ii) The default method of calculating the denominator degrees of freedom is Satterwhite’s method. One can use the option ddf to choose the Kenward-Roger method, which is often preferred by many researchers. (iii) Based on the simulation studies in (<span class="citation"><a href="#ref-pinheiro2006mixed" role="doc-biblioref">José Pinheiro and Bates</a> (<a href="#ref-pinheiro2006mixed" role="doc-biblioref">2006</a>)</span>), F tests usually perform better than likelihood ratio tests.</p>
+<p><strong>P-values for individual treatments</strong>. The effects of individual treatments are also of great interest. As shown earlier, the individual p-values from <em>nlme::lme</em> can be obtained by using the summary function. Similarly, one can also obtain individual p-values by using the lmerTest package for a model fit by <em>lmer</em>.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="conduct-lme-in-r-example-1.html#cb46-1" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lmerTest<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb46-2"><a href="conduct-lme-in-r-example-1.html#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(obj.lmer) #Sattertwhaite&#39;s method for denominator degrees of freedom</span></span>
+<span id="cb46-3"><a href="conduct-lme-in-r-example-1.html#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj.lmer, <span class="at">ddf=</span><span class="st">&quot;Kenward-Roger&quot;</span>)</span></code></pre></div>
+<pre><code>## Linear mixed model fit by REML. t-tests use Kenward-Roger&#39;s method [
+## lmerModLmerTest]
+## Formula: res ~ treatment_idx + (1 | midx)
+##    Data: Ex1
+## 
+## REML criterion at convergence: 2264.5
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.5388 -0.5761 -0.1129  0.4721  8.8601 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  midx     (Intercept) 0.2629   0.5127  
+##  Residual             0.3594   0.5995  
+## Number of obs: 1200, groups:  midx, 24
+## 
+## Fixed effects:
+##                Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)      1.0007     0.1964 18.9806   5.096 6.44e-05 ***
+## treatment_idx2   0.8194     0.2890 18.9745   2.835   0.0106 *  
+## treatment_idx3   0.8429     0.3589 19.0485   2.349   0.0298 *  
+## treatment_idx4   0.1898     0.3586 18.9960   0.529   0.6027    
+## treatment_idx5  -0.3200     0.3043 19.0078  -1.051   0.3062    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) trtm_2 trtm_3 trtm_4
+## tretmnt_dx2 -0.679                     
+## tretmnt_dx3 -0.547  0.372              
+## tretmnt_dx4 -0.548  0.372  0.300       
+## tretmnt_dx5 -0.645  0.438  0.353  0.353</code></pre>
+</div>
+<div id="p-value-adjustment-for-multiple-comparisons" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> P-value adjustment for multiple comparisons<a href="conduct-lme-in-r-example-1.html#p-value-adjustment-for-multiple-comparisons" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Note that the individual p-values shown above are for the comparison between each treatment group and the control group. Multiple comparisons have not been considered so far. Once a model is fit and an overall significance has been established, a natural question is which treatments are different from each other among a set of treatments. Consider Example 1, which involves five experimental conditions. The number of comparisons to examine all pairs of conditions is 10. When using unadjusted p-values and conducting testing at significance level <span class="math inline">\(\alpha =0.05\)</span>, the chance that we will make at least one false positive is much greater than 5%. The <strong>emmeans</strong> package can be used to adjust p-values by taking multiple comparisons into consideration. Two useful options are (i) the adjustment of multiple comparisons for all pairs of treatment by adding “pairwise” and (ii) the adjustment for comparisons for all the treatments to the control by adding “trt.vs.ctrl” and specifying the reference group, which is group “1” in this example.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="conduct-lme-in-r-example-1.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb48-2"><a href="conduct-lme-in-r-example-1.html#cb48-2" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lme4<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb48-3"><a href="conduct-lme-in-r-example-1.html#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(<span class="fu">emmeans</span>(obj.lmer, <span class="at">specs=</span><span class="st">&quot;treatment_idx&quot;</span>), <span class="st">&quot;pairwise&quot;</span>)</span></code></pre></div>
+<pre><code>##  contrast estimate    SE   df t.ratio p.value
+##  1 - 2     -0.8194 0.289 19.0  -2.835  0.0704
+##  1 - 3     -0.8429 0.359 19.1  -2.349  0.1727
+##  1 - 4     -0.1898 0.359 19.0  -0.529  0.9832
+##  1 - 5      0.3200 0.304 19.0   1.051  0.8283
+##  2 - 3     -0.0235 0.368 19.0  -0.064  1.0000
+##  2 - 4      0.6296 0.367 19.0   1.713  0.4496
+##  2 - 5      1.1394 0.315 19.0   3.621  0.0138
+##  3 - 4      0.6531 0.425 19.0   1.538  0.5517
+##  3 - 5      1.1629 0.380 19.1   3.062  0.0447
+##  4 - 5      0.5098 0.380 19.0   1.343  0.6690
+## 
+## Degrees-of-freedom method: kenward-roger 
+## P value adjustment: tukey method for comparing a family of 5 estimates</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="conduct-lme-in-r-example-1.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the default method of degrees of freedom is Kenward-Roger’s method</span></span>
+<span id="cb50-2"><a href="conduct-lme-in-r-example-1.html#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(<span class="fu">emmeans</span>(obj.lmer, <span class="at">specs=</span><span class="st">&quot;treatment_idx&quot;</span>), <span class="st">&quot;trt.vs.ctrl&quot;</span>, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>)</span></code></pre></div>
+<pre><code>##  contrast estimate    SE   df t.ratio p.value
+##  2 - 1       0.819 0.289 19.0   2.835  0.0364
+##  3 - 1       0.843 0.359 19.1   2.349  0.0965
+##  4 - 1       0.190 0.359 19.0   0.529  0.9219
+##  5 - 1      -0.320 0.304 19.0  -1.051  0.6613
+## 
+## Degrees-of-freedom method: kenward-roger 
+## P value adjustment: dunnettx method for 4 tests</code></pre>
+<p>In the pairwise adjustment for Example 1, one examines all the ten pairs, listed as “1-2,” <span class="math inline">\(\cdots\)</span>, “4-5.” When only the difference between each of the four treatments and the control is of interest, the number of comparisons reduced to four. As a result, the adjusted p-values for all pairs are less significant than the adjusted p-values based on “trt.vs.ctrl.”</p>
+</div>
+<div id="robust-methods-with-parametric-bootstrap" class="section level2 hasAnchor" number="4.6">
+<h2><span class="header-section-number">4.6</span> Robust methods with parametric bootstrap<a href="conduct-lme-in-r-example-1.html#robust-methods-with-parametric-bootstrap" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Instead of relying on large-sample distributions or approximations based on F distributions, the <strong>pbkrtest</strong> package provides a parametric bootstrap test to compare two models, as shown below. Resampling methods, such as bootstrap, are often believed to be more robust than their parametric counterparts.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="conduct-lme-in-r-example-1.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pbkrtest)</span>
+<span id="cb52-2"><a href="conduct-lme-in-r-example-1.html#cb52-2" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lmerTest<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb52-3"><a href="conduct-lme-in-r-example-1.html#cb52-3" aria-hidden="true" tabindex="-1"></a>obj.lmer0<span class="ot">=</span>lmerTest<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> <span class="dv">1</span><span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb52-4"><a href="conduct-lme-in-r-example-1.html#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="co">#the following code might take a few minutes</span></span>
+<span id="cb52-5"><a href="conduct-lme-in-r-example-1.html#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="fu">PBmodcomp</span>(obj.lmer, obj.lmer0)</span></code></pre></div>
+</div>
+<div id="additional-tools" class="section level2 hasAnchor" number="4.7">
+<h2><span class="header-section-number">4.7</span> Additional tools<a href="conduct-lme-in-r-example-1.html#additional-tools" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>There are other potentially useful alternative functions, such as <em>car::Anova</em>, and <em>sjPlot::plot_scatter</em>, <em>sjPlot::plot_model</em>. We provide sample code and encourage interested readers to continue exploring these packages if they wish to compare additional tools.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="conduct-lme-in-r-example-1.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car) <span class="co">#load the car library</span></span>
+<span id="cb53-2"><a href="conduct-lme-in-r-example-1.html#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjPlot) <span class="co">#load the sjPlot library</span></span>
+<span id="cb53-3"><a href="conduct-lme-in-r-example-1.html#cb53-3" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lme4<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb53-4"><a href="conduct-lme-in-r-example-1.html#cb53-4" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(obj.lmer, <span class="at">test.statistic=</span><span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<pre><code>## Analysis of Deviance Table (Type II Wald F tests with Kenward-Roger df)
+## 
+## Response: res
+##                    F Df Df.res   Pr(&gt;F)   
+## treatment_idx 4.6878  4 19.014 0.008398 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="conduct-lme-in-r-example-1.html#cb55-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(obj.lmer)</span></code></pre></div>
+<p><img src="mm-in-neuroscience_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="conduct-lme-in-r-example-1.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_scatter</span>(Ex1, midx, res, treatment_idx)</span></code></pre></div>
+<p><img src="mm-in-neuroscience_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
+
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-pinheiro2006mixed" class="csl-entry">
+Pinheiro, José, and Douglas Bates. 2006. <em>Mixed-Effects Models in s and s-PLUS</em>. Springer science &amp; business media.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="mixed-effects-model-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conduct-lme-in-r-example-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["mm-in-neuroscience.pdf", "mm-in-neuroscience.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

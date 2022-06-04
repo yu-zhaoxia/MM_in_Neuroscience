@@ -1,0 +1,36 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+# A Bayesian Analysis of Example 4
+
+A Bayesian Analysis of Example 4. In the LME and GLMM framework, the random effect coefficients are assumed as being drawn from a given distribution. Therefore, Bayesian analysis provides a natural alternative for analyzing multilevel/ hierarchical data. Statistical inference in Bayesian analysis is from the posterior distribution of the parameters, which is proportional to the product of the likelihood of the data and the prior distribution of the parameters. Here we use the “brms” package to analyze the water lick data. The package performs Bayesian regression in multilevel models using the software “Stan” for full Bayesian (@burkner2017brms, @burkner2017advanced). Due to the lack of prior information, we select priors that are relatively non-informative, i.e., have large variances around their mean. More specifically, we use a normal prior with mean 0 and large standard deviation 10 for the fixed-effect coefficients. For the variances of the random intercept and the errors, we assume a half-Cauchy distribution with a scale parameter of 5.
+
+```{R, eval = FALSE}
+library(brms)#it might ask you to install other necessary packages
+waterlick=read.table("https://www.ics.uci.edu/~zhaoxia/Data/BeyondTandANOVA/waterlick_sim.txt", head=T)
+obj.brms=brm(formula = lick ~ dff + (1|mouseID), data=waterlick, family="bernoulli",
+prior = c( set_prior("normal(0,10)", class="b"), set_prior("cauchy(0,5)", class="sd")),warmup=1000, iter=2000, chains=4,control = list(adapt_delta = 0.95), save_all_pars = TRUE)
+summary(obj.brms)
+summary(obj.brms)$fixed
+```
+
+The results show that the odds that the mice will make a correct prediction increase by 6.2% (95% credible interval: 2.0%-10.6%) with 1% increase in dF/F. The use of a Bayesian approach and the Bayes factors have been advocated as an alternative to p-values since the Bayes factor represents a direct measure of the evidence of one model versus the other. Typically, it is recognized that a Bayes Factor greater than 150 provides a very strong evidence of a hypothesis, say H1, against another hypothesis, say H0; a Bayes Factor between 20 and 150 provides strong evidence of the plausibility of H1, whereas if the Bayes Factor is between 3 and 20, it provides only positive evidence for H1. A value of the Bayes Factor between 1 and 3 is not worth more than a bare mention (@held2018p, @kass1995bayes). In the following computation, we find that the Bayes factor of the model with dF/F versus the null model is 5.02, suggesting moderate association of dF/F with correct licks. These results are comparable to those from the frequentist GLMM in the previous paragraph.
+
+```{R, eval = FALSE}
+#Note: to compute a Bayes factor, we need to use “save_all_pars=TRUE” option
+#the reduced model is
+obj0.brms=brm(formula = lick ~ 1+ (1|mouseID),
+data=waterlick, family="bernoulli",
+prior = c(set_prior("cauchy(0,5)", class="sd")),
+warmup=1000, iter=2000, chains=4,
+control = list(adapt_delta = 0.95),save_all_pars = TRUE)
+summary(obj0.brms)
+#compare the two models by computing the Bayes factor: the one with dff vs the null
+bayes_factor(obj.brms, obj0.brms)
+#compare the models by computing the Bayes factor: the null vs the one with dff
+#note that this Bayes factor is the reciprocal of the previous one
+bayes_factor(obj0.brms, obj.brms)
+```
+

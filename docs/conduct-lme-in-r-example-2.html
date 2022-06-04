@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Conduct LME in R: Example 2 | Mixed-effects model and its application in neuroscience</title>
+  <meta name="description" content="This is the online supplemental to accomany Yu Z, Guindani M, Grieco SF, Chen L, Holmes TC, Xu X. (2022) Beyond t-Test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron. 110: 21-23." />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Conduct LME in R: Example 2 | Mixed-effects model and its application in neuroscience" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This is the online supplemental to accomany Yu Z, Guindani M, Grieco SF, Chen L, Holmes TC, Xu X. (2022) Beyond t-Test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron. 110: 21-23." />
+  <meta name="github-repo" content="rstudio/mm-in-neuroscience" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Conduct LME in R: Example 2 | Mixed-effects model and its application in neuroscience" />
+  
+  <meta name="twitter:description" content="This is the online supplemental to accomany Yu Z, Guindani M, Grieco SF, Chen L, Holmes TC, Xu X. (2022) Beyond t-Test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron. 110: 21-23." />
+  
+
+<meta name="author" content="Zhaoxia Yu, Michele Guindani, Steven F. Grieco, Lujia Chen, Todd C. Holmes, Xiangmin Xu" />
+
+
+<meta name="date" content="2022-06-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="conduct-lme-in-r-example-1.html"/>
+<link rel="next" href="conduct-lme-in-r-example-3.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Application of Mixed-effects Model in Neuroscience</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Supplemental data download</a></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="3" data-path="mixed-effects-model-analysis.html"><a href="mixed-effects-model-analysis.html"><i class="fa fa-check"></i><b>3</b> Mixed-effects model analysis</a></li>
+<li class="chapter" data-level="4" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html"><i class="fa fa-check"></i><b>4</b> Conduct LME in R: Example 1</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#wrong-analysis-with-lm-or-anova"><i class="fa fa-check"></i><b>4.1</b> Wrong analysis with lm or anova</a></li>
+<li class="chapter" data-level="4.2" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#lme-estimation-methods"><i class="fa fa-check"></i><b>4.2</b> LME: estimation methods</a></li>
+<li class="chapter" data-level="4.3" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#on-the-degrees-of-freedom-and-p-values"><i class="fa fa-check"></i><b>4.3</b> On the degrees of freedom and P-values</a></li>
+<li class="chapter" data-level="4.4" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#the-overall-p-value-for-the-treatment-factor-vs-p-values-for-individual-treatments"><i class="fa fa-check"></i><b>4.4</b> The overall p-value for the treatment factor vs p-values for individual treatments</a></li>
+<li class="chapter" data-level="4.5" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#p-value-adjustment-for-multiple-comparisons"><i class="fa fa-check"></i><b>4.5</b> P-value adjustment for multiple comparisons</a></li>
+<li class="chapter" data-level="4.6" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#robust-methods-with-parametric-bootstrap"><i class="fa fa-check"></i><b>4.6</b> Robust methods with parametric bootstrap</a></li>
+<li class="chapter" data-level="4.7" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#additional-tools"><i class="fa fa-check"></i><b>4.7</b> Additional tools</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html"><i class="fa fa-check"></i><b>5</b> Conduct LME in R: Example 2</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#wrong-analysis"><i class="fa fa-check"></i><b>5.1</b> Wrong analysis</a></li>
+<li class="chapter" data-level="5.2" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#lme"><i class="fa fa-check"></i><b>5.2</b> LME</a></li>
+<li class="chapter" data-level="5.3" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#why-pooling-data-naively-is-not-a-good-idea"><i class="fa fa-check"></i><b>5.3</b> Why pooling data naively is not a good idea?</a></li>
+<li class="chapter" data-level="5.4" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#remark-on-the-minimum-number-of-levels-for-using-random-effects"><i class="fa fa-check"></i><b>5.4</b> Remark: on the minimum number of levels for using random-effects</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html"><i class="fa fa-check"></i><b>6</b> Conduct LME in R: Example 3</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#wrong-analysis-with-lm-paired-or-unpaired-t-test"><i class="fa fa-check"></i><b>6.1</b> Wrong analysis with lm, paired or unpaired t-test</a></li>
+<li class="chapter" data-level="6.2" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#a-note-on-nested-random-effects"><i class="fa fa-check"></i><b>6.2</b> A note on “nested” random effects</a></li>
+<li class="chapter" data-level="6.3" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#on-models-with-more-random-effects"><i class="fa fa-check"></i><b>6.3</b> On models with more random effects</a></li>
+<li class="chapter" data-level="6.4" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#a-note-on-the-testing-of-random-effects."><i class="fa fa-check"></i><b>6.4</b> A note on the testing of random-effects.</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="generalized-linear-mixed-effects-models-and-example-4.html"><a href="generalized-linear-mixed-effects-models-and-example-4.html"><i class="fa fa-check"></i><b>7</b> Generalized Linear Mixed-Effects Models and Example 4</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="generalized-linear-mixed-effects-models-and-example-4.html"><a href="generalized-linear-mixed-effects-models-and-example-4.html#fit-a-glmm-in-r"><i class="fa fa-check"></i><b>7.1</b> Fit a GLMM in R</a></li>
+<li class="chapter" data-level="7.2" data-path="generalized-linear-mixed-effects-models-and-example-4.html"><a href="generalized-linear-mixed-effects-models-and-example-4.html#use-nonparametric-methods-to-produce-more-accurate-p-values"><i class="fa fa-check"></i><b>7.2</b> Use nonparametric methods to produce more accurate p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="a-bayesian-analysis-of-example-4.html"><a href="a-bayesian-analysis-of-example-4.html"><i class="fa fa-check"></i><b>8</b> A Bayesian Analysis of Example 4</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Mixed-effects model and its application in neuroscience</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="conduct-lme-in-r-example-2" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Conduct LME in R: Example 2<a href="conduct-lme-in-r-example-2.html#conduct-lme-in-r-example-2" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><strong>Example 2</strong>. Data were derived from an experiment to determine how in vivo calcium (Ca++) activity of PV cells (measured longitudinally by the genetically encoded Ca++ indicator GCaMP6s) changes over time after ketamine treatment. We show four mice whose Ca++ event frequencies were measured at 24h, 48h, 72h, and 1 week after ketamine treatment and compare Ca++ event frequency at 24h to the other three time points. In total, Ca++ event frequencies of 1,724 neurons were measured. First let us evaluate the effect of ketamine using LM (or ANOVA, which ignores mouse-specific effect).</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="conduct-lme-in-r-example-2.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="do">###load libraries</span></span>
+<span id="cb57-2"><a href="conduct-lme-in-r-example-2.html#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)</span>
+<span id="cb57-3"><a href="conduct-lme-in-r-example-2.html#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
+<span id="cb57-4"><a href="conduct-lme-in-r-example-2.html#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="do">### read the data</span></span>
+<span id="cb57-5"><a href="conduct-lme-in-r-example-2.html#cb57-5" aria-hidden="true" tabindex="-1"></a>Ex2<span class="ot">=</span><span class="fu">read.csv</span>(<span class="st">&quot;https://www.ics.uci.edu/~zhaoxia/Data/BeyondTandANOVA/Example2.txt&quot;</span>, <span class="at">head=</span>T)</span>
+<span id="cb57-6"><a href="conduct-lme-in-r-example-2.html#cb57-6" aria-hidden="true" tabindex="-1"></a>Ex2<span class="sc">$</span>treatment_idx<span class="ot">=</span>Ex2<span class="sc">$</span>treatment_idx<span class="dv">-4</span></span>
+<span id="cb57-7"><a href="conduct-lme-in-r-example-2.html#cb57-7" aria-hidden="true" tabindex="-1"></a>Ex2<span class="sc">$</span>treatment_idx<span class="ot">=</span><span class="fu">as.factor</span>(Ex2<span class="sc">$</span>treatment_idx)</span>
+<span id="cb57-8"><a href="conduct-lme-in-r-example-2.html#cb57-8" aria-hidden="true" tabindex="-1"></a><span class="do">### change the variable of mouse IDs to a factor</span></span>
+<span id="cb57-9"><a href="conduct-lme-in-r-example-2.html#cb57-9" aria-hidden="true" tabindex="-1"></a>Ex2<span class="sc">$</span>midx<span class="ot">=</span><span class="fu">as.factor</span>(Ex2<span class="sc">$</span>midx)</span></code></pre></div>
+<div id="wrong-analysis" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Wrong analysis<a href="conduct-lme-in-r-example-2.html#wrong-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="conduct-lme-in-r-example-2.html#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="do">### wrong analysis: using the linear model</span></span>
+<span id="cb58-2"><a href="conduct-lme-in-r-example-2.html#cb58-2" aria-hidden="true" tabindex="-1"></a>lm.obj<span class="ot">=</span><span class="fu">lm</span>(res<span class="sc">~</span>treatment_idx, <span class="at">data=</span>Ex2)</span>
+<span id="cb58-3"><a href="conduct-lme-in-r-example-2.html#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm.obj)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = res ~ treatment_idx, data = Ex2)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.66802 -0.10602 -0.00916  0.09028  2.43137 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     0.714905   0.012337  57.946  &lt; 2e-16 ***
+## treatment_idx2 -0.078020   0.017011  -4.586 4.84e-06 ***
+## treatment_idx3  0.009147   0.017189   0.532  0.59467    
+## treatment_idx4  0.049716   0.016332   3.044  0.00237 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2414 on 1720 degrees of freedom
+## Multiple R-squared:  0.03715,    Adjusted R-squared:  0.03548 
+## F-statistic: 22.12 on 3 and 1720 DF,  p-value: 4.677e-14</code></pre>
+<p>The LM (including ANOVA, t-test) analysis results indicate significantly reduced Ca++ activity at 48h relative to 24h with <span class="math inline">\(p=4.8\times 10^{-6}\)</span>, and significantly increased Ca++ event frequency at 1week compared to 24h with <span class="math inline">\(p=2.4\times 10^{-3}\)</span>. However, if we account for repeated measures due to cells clustered in mice using LME, most of p-values are greater than 0.05 except that the overall p-value is 0.04.</p>
+</div>
+<div id="lme" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> LME<a href="conduct-lme-in-r-example-2.html#lme" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="conduct-lme-in-r-example-2.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="do">### lme</span></span>
+<span id="cb60-2"><a href="conduct-lme-in-r-example-2.html#cb60-2" aria-hidden="true" tabindex="-1"></a>lme.obj<span class="ot">=</span><span class="fu">lme</span>(res<span class="sc">~</span>treatment_idx, <span class="at">random=</span> <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span> midx, <span class="at">data=</span> Ex2, <span class="at">method=</span><span class="st">&quot;ML&quot;</span>)</span>
+<span id="cb60-3"><a href="conduct-lme-in-r-example-2.html#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lme.obj)</span>
+<span id="cb60-4"><a href="conduct-lme-in-r-example-2.html#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(lme.obj)</span></code></pre></div>
+<p>The results (estimates <span class="math inline">\(\pm\)</span> s.e., and p-values) the Ca++ event frequency data using <em>LM</em> and <em>LME</em> (<strong>Example 2</strong>).</p>
+<p>A TABLE HERE.</p>
+</div>
+<div id="why-pooling-data-naively-is-not-a-good-idea" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Why pooling data naively is not a good idea?<a href="conduct-lme-in-r-example-2.html#why-pooling-data-naively-is-not-a-good-idea" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To understand the discrepancy between the results from LM and LME, we created boxplots using individual mice as well as all the mice (Figure <a href="conduct-lme-in-r-example-2.html#fig:S2">5.1</a>). Although the pooled data and the corresponding p value from the LM show significant reduction in Ca++ activities from 24h to 48h, we see that the only mouse showing a noticeable reduction was Mouse 2. In fact, a close examination of Figure <a href="conduct-lme-in-r-example-2.html#fig:S2">5.1</a> suggests that there might be small increases in the other three mice.</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="conduct-lme-in-r-example-2.html#cb61-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;Fig2S.jpg&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:S2"></span>
+<img src="Fig2S.jpg" alt="The boxplots of Ca++ event frequencies measured at four time points. (A) Boxplot of Ca++ event frequencies using the pooled neurons from four mice. (B) boxplots of Ca++ event frequencies stratified by individual mice." width="100%" />
+<p class="caption">
+Figure 5.1: The boxplots of Ca++ event frequencies measured at four time points. (A) Boxplot of Ca++ event frequencies using the pooled neurons from four mice. (B) boxplots of Ca++ event frequencies stratified by individual mice.
+</p>
+</div>
+<p>To examine why the pooled data follow the pattern of Mouse 2 and not that of other mice, we checked the number of neurons in each of the mouse-by-time combinations.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="conduct-lme-in-r-example-2.html#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># one mouse contributed 43% cells</span></span>
+<span id="cb62-2"><a href="conduct-lme-in-r-example-2.html#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the number of cells in each animal-time combination</span></span>
+<span id="cb62-3"><a href="conduct-lme-in-r-example-2.html#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(Ex2<span class="sc">$</span>midx, Ex2<span class="sc">$</span>treatment_idx)</span></code></pre></div>
+<pre><code>##    
+##       1   2   3   4
+##   1  81 254  88  43
+##   2 206 101 210 222
+##   3  33  18  51 207
+##   4  63  52  58  37</code></pre>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="conduct-lme-in-r-example-2.html#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the percent of cells contributed by each mouse</span></span>
+<span id="cb64-2"><a href="conduct-lme-in-r-example-2.html#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rowSums</span>(<span class="fu">table</span>(Ex2<span class="sc">$</span>midx, Ex2<span class="sc">$</span>treatment_idx))<span class="sc">/</span><span class="dv">1724</span></span></code></pre></div>
+<pre><code>##         1         2         3         4 
+## 0.2703016 0.4286543 0.1792343 0.1218097</code></pre>
+<p><strong>The above table doesn’t work</strong></p>
+<p>The last column of the table above shows that Mouse 2 contributed 43% cells, which likely explains why the pooled data are more similar to Mouse 2 than to the other mice. The lesson from this example is that naively pooling data from different animals is a potentially dangerous practice, as the results can be dominated by a single animal that can misrepresent the data. Application of LME solves this troubling potential problem as it takes dependency and weighting into account.</p>
+</div>
+<div id="remark-on-the-minimum-number-of-levels-for-using-random-effects" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Remark: on the minimum number of levels for using random-effects<a href="conduct-lme-in-r-example-2.html#remark-on-the-minimum-number-of-levels-for-using-random-effects" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this example, the number of levels in the random-effects variable is four, as there are four mice. This number may be smaller than the recommended number for using random-effects. However, as discussed in <span class="citation"><a href="#ref-gelman2006data" role="doc-biblioref">Gelman and Hill</a> (<a href="#ref-gelman2006data" role="doc-biblioref">2006</a>)</span>, using a random-effects model in this situation of a small sample size might not do much harm. An alternative is to include the animal ID variable as a factor with fixed animal effects in the conventional linear regression. Note that neither of the two analyses is the same as fitting a linear model to the pooled cells together, which erroneously ignores the between-animal heterogeneity and fails to account for the data dependency due to the within-animal similarity. In a more extreme case, for an experiment using only two monkeys for example, naively pooling the neurons from the two animals faces the risk of making conclusions mainly from one animal and unrealistic homogeneous assumptions across animals, as discussed above. A more appropriate approach is to analyze the animals separately and check whether the results from these two animals “replicate” each other. Exploratory analysis such as data visualization is highly recommended to identify potential issues.</p>
+
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-gelman2006data" class="csl-entry">
+Gelman, Andrew, and Jennifer Hill. 2006. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Cambridge university press.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="conduct-lme-in-r-example-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conduct-lme-in-r-example-3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["mm-in-neuroscience.pdf", "mm-in-neuroscience.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

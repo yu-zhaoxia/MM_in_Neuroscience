@@ -1,0 +1,62 @@
+# Generalized Linear Mixed-Effects Models and Example 4
+Traditional linear models and LME should be designed to model a continuous outcome variable with a fundamental assumption that its variance does not change with its mean. This assumption is easily violated for commonly collected outcome variables, such as the choice made in a two-alternative forced choice task (binary data), the proportion of neurons activated (proportional data), the number neural spikes in a given time window, and the number of behavioral freezes in each session (count data). These types of outcome variables can be analyzed using a framework called generalized linear models, which are further extended to generalized linear mixed-effects models (GLMM) for correlated data. The computation involved in GLMM is more much challenging. The _glmer_ function in the __lme4__ package can be used to fit a GLMM, which will be shown in Example 4.
+
+__Example 4__. In the previous examples, the outcomes of interest are continuous. In particular, some were transformed from original measures so that the distribution of the outcome variable still has a rough bell shape. In many situations, the outcome variable we are interested has a distribution that far away from normal. Consider a simulated data set based upon part of the data used in @wei2020comparison. In our simulated data, a tactile delayed response task, eight mice were trained to use their whiskers to predict the location (left or right) of a water pole and report it with directional licking (lick left or lick right). The behavioral outcome we are interested in is whether the animals made the correct predictions. Therefore, we code correct left or right licks as 1 and erroneous licks as 0. In total, 512 trials were generated, which include 216 correct trials and 296 wrong trials. One question we would like to answer is whether a particular neuron is associated with the prediction. For that purpose, we analyze the prediction outcome and mean neural activity levels (measured by dF/F) from the 512 trials using a GLMM. The importance of modeling correlated data by introducing random effects has been shown in the previous examples. In this example, we focus on how to interpret results from a GLMM model in the water lick experiment.
+
+## Fit a GLMM in R
+Like a GLM, a GLMM requires the specification of a family of the distributions of the outcomes and an appropriate link function. Because the outcomes in this example are binary, the natural choice, which is often called the canonical link of the “binomial” family, is the logistic link. For each family of distributions, there is a canonical link, which is well defined and natural to that distribution family. For researchers with limited experience with GLM or GLMM, a good starting point, which is often a reasonable choice, is to use the default choice (i.e., the canonical link).
+
+```{R, eval = FALSE}
+library(lme4) #the main functions are "lmer" and glmer
+library(pbkrtest)
+#read data from the file named “waterlick_sim.txt”
+waterlick=read.table("https://www.ics.uci.edu/~zhaoxia/Data/BeyondTandANOVA/waterlick_sim.txt", head=T)
+#take a look at the data
+summary(waterlick)
+#change the mouseID to a factor
+waterlick[,1]=as.factor(waterlick[,1])
+#use glmer to fit a GLMM model
+obj.glmm=glmer(lick~dff+(1|mouseID),
+data=waterlick,family="binomial")
+#summarize the model
+summary(obj.glmm)
+#compute increase in odds and a 95% CI
+exp(c(0.06235, 0.06235-1.96*0.01986, 0.06235+1.96*0.01986))-1
+```
+
+
+The default method of parameter estimation is the maximum likelihood with Laplace approximation. As shown in the Fixed effects section of the R output, the estimated increase in log-odds associated with one percent increase in dF/F is 0.06235 with a standard error of 0.01986 and the p-value
+(which is based on the large-sample Wald test) is 0.01693. Correspondingly, an approximate 95% CI is (0.06235-1.96\*0.01986, 0.06235+1.96\*0.01986), i.e., (0.0234244 0.1012756). In a logistic regression, the estimated coefficient of an independent variable is typically interpreted using the percentage of odds changed for a one-unit increase in the independent variable. In this example, exp(0.06235)=1.064,
+indicating that the odds of making correct licks increased by 6.4% (95% C.I.: 2.4%-10.7%) with one percent increase in dF/F.
+
+An alternative way to compute a p-value is to use a likelihood ratio test by comparing the likelihoods of the current model and a reduced model.
+
+```{R, eval = FALSE}
+#fit a smaller model, the model with the dff variable removed
+obj.glmm.smaller=glmer(lick~(1|mouseID),
+data=waterlick,family="binomial")
+#use the anova function to compare the likelihoods of the two models
+anova(obj.glmm, obj.glmm.smaller)
+#alternatively, one can use the “drop1” function to test the effect of dfff
+drop1(obj.glmm, test="Chisq")
+```
+
+
+In the output from “anova(obj.glmm, obj.glmm.smaller)”, the “Chisq” is the $-2*log(L_0/L_1)$, where $L_1$ is the maximized likelihood of the model with dff and $L_0$ is the maximized likelihood of the model without the dff. The p-value was obtained using the large-sample likelihood ratio test.
+
+## Use nonparametric methods to produce more accurate p-values
+In GLMM, the p-value based on large-sample approximations might not be accurate. It is helpful to check whether nonparametric tests lead to similar findings. For example, one can use a parametric bootstrap method. For this example, the p-value from the parametric bootstrap test, which is slightly less significant than the p-values from the Wald or LRT test.
+
+```{R, eval = FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+#The code might take a few minutes
+PBmodcomp(obj.glmm, obj.glmm.smaller)
+```
+By default, 1000 samples were generated to understand the null distribution of the likelihood ratio statistic. When a p-value is small, 1000 samples might not return an accurate estimation. In this situation, one can increase the number of samples to 10,000 or even more. One way to expedite computation is by using multiple cores. We encourage the interested readers to read the documentation of this package, which is available at https://cran.rproject.org/web/packages/pbkrtest/pbkrtest.pdf.
+
+A note on convergence. Compared to LME, GLMM is harder to converge. When increasing the number of iterations does not work, one can change the likelihood approximation methods and numerical maximization methods. If convergence is still problematic, one might want to consider modifying models. For example, eliminating some random effects will likely make the algorithm converge. In particular, when the number of levels of a categorical variable is small, using fixed- rather than random- effects might help resolve the convergence issues. Using Bayesian alternatives might also be helpful. We recommend readers to check several relevant websites for further guidance:
+
+https://rstudio-pubs-static.s3.amazonaws.com/33653_57fc7b8e5d484c909b615d8633c01d51.html
+
+https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html
+
+https://m-clark.github.io/posts/2020-03-16-convergence/

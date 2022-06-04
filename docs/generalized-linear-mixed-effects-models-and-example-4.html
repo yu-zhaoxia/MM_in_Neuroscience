@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Generalized Linear Mixed-Effects Models and Example 4 | Mixed-effects model and its application in neuroscience</title>
+  <meta name="description" content="This is the online supplemental to accomany Yu Z, Guindani M, Grieco SF, Chen L, Holmes TC, Xu X. (2022) Beyond t-Test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron. 110: 21-23." />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Generalized Linear Mixed-Effects Models and Example 4 | Mixed-effects model and its application in neuroscience" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This is the online supplemental to accomany Yu Z, Guindani M, Grieco SF, Chen L, Holmes TC, Xu X. (2022) Beyond t-Test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron. 110: 21-23." />
+  <meta name="github-repo" content="rstudio/mm-in-neuroscience" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Generalized Linear Mixed-Effects Models and Example 4 | Mixed-effects model and its application in neuroscience" />
+  
+  <meta name="twitter:description" content="This is the online supplemental to accomany Yu Z, Guindani M, Grieco SF, Chen L, Holmes TC, Xu X. (2022) Beyond t-Test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron. 110: 21-23." />
+  
+
+<meta name="author" content="Zhaoxia Yu, Michele Guindani, Steven F. Grieco, Lujia Chen, Todd C. Holmes, Xiangmin Xu" />
+
+
+<meta name="date" content="2022-06-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="conduct-lme-in-r-example-3.html"/>
+<link rel="next" href="a-bayesian-analysis-of-example-4.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Application of Mixed-effects Model in Neuroscience</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Supplemental data download</a></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="3" data-path="mixed-effects-model-analysis.html"><a href="mixed-effects-model-analysis.html"><i class="fa fa-check"></i><b>3</b> Mixed-effects model analysis</a></li>
+<li class="chapter" data-level="4" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html"><i class="fa fa-check"></i><b>4</b> Conduct LME in R: Example 1</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#wrong-analysis-with-lm-or-anova"><i class="fa fa-check"></i><b>4.1</b> Wrong analysis with lm or anova</a></li>
+<li class="chapter" data-level="4.2" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#lme-estimation-methods"><i class="fa fa-check"></i><b>4.2</b> LME: estimation methods</a></li>
+<li class="chapter" data-level="4.3" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#on-the-degrees-of-freedom-and-p-values"><i class="fa fa-check"></i><b>4.3</b> On the degrees of freedom and P-values</a></li>
+<li class="chapter" data-level="4.4" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#the-overall-p-value-for-the-treatment-factor-vs-p-values-for-individual-treatments"><i class="fa fa-check"></i><b>4.4</b> The overall p-value for the treatment factor vs p-values for individual treatments</a></li>
+<li class="chapter" data-level="4.5" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#p-value-adjustment-for-multiple-comparisons"><i class="fa fa-check"></i><b>4.5</b> P-value adjustment for multiple comparisons</a></li>
+<li class="chapter" data-level="4.6" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#robust-methods-with-parametric-bootstrap"><i class="fa fa-check"></i><b>4.6</b> Robust methods with parametric bootstrap</a></li>
+<li class="chapter" data-level="4.7" data-path="conduct-lme-in-r-example-1.html"><a href="conduct-lme-in-r-example-1.html#additional-tools"><i class="fa fa-check"></i><b>4.7</b> Additional tools</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html"><i class="fa fa-check"></i><b>5</b> Conduct LME in R: Example 2</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#wrong-analysis"><i class="fa fa-check"></i><b>5.1</b> Wrong analysis</a></li>
+<li class="chapter" data-level="5.2" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#lme"><i class="fa fa-check"></i><b>5.2</b> LME</a></li>
+<li class="chapter" data-level="5.3" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#why-pooling-data-naively-is-not-a-good-idea"><i class="fa fa-check"></i><b>5.3</b> Why pooling data naively is not a good idea?</a></li>
+<li class="chapter" data-level="5.4" data-path="conduct-lme-in-r-example-2.html"><a href="conduct-lme-in-r-example-2.html#remark-on-the-minimum-number-of-levels-for-using-random-effects"><i class="fa fa-check"></i><b>5.4</b> Remark: on the minimum number of levels for using random-effects</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html"><i class="fa fa-check"></i><b>6</b> Conduct LME in R: Example 3</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#wrong-analysis-with-lm-paired-or-unpaired-t-test"><i class="fa fa-check"></i><b>6.1</b> Wrong analysis with lm, paired or unpaired t-test</a></li>
+<li class="chapter" data-level="6.2" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#a-note-on-nested-random-effects"><i class="fa fa-check"></i><b>6.2</b> A note on “nested” random effects</a></li>
+<li class="chapter" data-level="6.3" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#on-models-with-more-random-effects"><i class="fa fa-check"></i><b>6.3</b> On models with more random effects</a></li>
+<li class="chapter" data-level="6.4" data-path="conduct-lme-in-r-example-3.html"><a href="conduct-lme-in-r-example-3.html#a-note-on-the-testing-of-random-effects."><i class="fa fa-check"></i><b>6.4</b> A note on the testing of random-effects.</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="generalized-linear-mixed-effects-models-and-example-4.html"><a href="generalized-linear-mixed-effects-models-and-example-4.html"><i class="fa fa-check"></i><b>7</b> Generalized Linear Mixed-Effects Models and Example 4</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="generalized-linear-mixed-effects-models-and-example-4.html"><a href="generalized-linear-mixed-effects-models-and-example-4.html#fit-a-glmm-in-r"><i class="fa fa-check"></i><b>7.1</b> Fit a GLMM in R</a></li>
+<li class="chapter" data-level="7.2" data-path="generalized-linear-mixed-effects-models-and-example-4.html"><a href="generalized-linear-mixed-effects-models-and-example-4.html#use-nonparametric-methods-to-produce-more-accurate-p-values"><i class="fa fa-check"></i><b>7.2</b> Use nonparametric methods to produce more accurate p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="a-bayesian-analysis-of-example-4.html"><a href="a-bayesian-analysis-of-example-4.html"><i class="fa fa-check"></i><b>8</b> A Bayesian Analysis of Example 4</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Mixed-effects model and its application in neuroscience</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="generalized-linear-mixed-effects-models-and-example-4" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Generalized Linear Mixed-Effects Models and Example 4<a href="generalized-linear-mixed-effects-models-and-example-4.html#generalized-linear-mixed-effects-models-and-example-4" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Traditional linear models and LME should be designed to model a continuous outcome variable with a fundamental assumption that its variance does not change with its mean. This assumption is easily violated for commonly collected outcome variables, such as the choice made in a two-alternative forced choice task (binary data), the proportion of neurons activated (proportional data), the number neural spikes in a given time window, and the number of behavioral freezes in each session (count data). These types of outcome variables can be analyzed using a framework called generalized linear models, which are further extended to generalized linear mixed-effects models (GLMM) for correlated data. The computation involved in GLMM is more much challenging. The <em>glmer</em> function in the <strong>lme4</strong> package can be used to fit a GLMM, which will be shown in Example 4.</p>
+<p><strong>Example 4</strong>. In the previous examples, the outcomes of interest are continuous. In particular, some were transformed from original measures so that the distribution of the outcome variable still has a rough bell shape. In many situations, the outcome variable we are interested has a distribution that far away from normal. Consider a simulated data set based upon part of the data used in <span class="citation"><a href="#ref-wei2020comparison" role="doc-biblioref">Wei et al.</a> (<a href="#ref-wei2020comparison" role="doc-biblioref">2020</a>)</span>. In our simulated data, a tactile delayed response task, eight mice were trained to use their whiskers to predict the location (left or right) of a water pole and report it with directional licking (lick left or lick right). The behavioral outcome we are interested in is whether the animals made the correct predictions. Therefore, we code correct left or right licks as 1 and erroneous licks as 0. In total, 512 trials were generated, which include 216 correct trials and 296 wrong trials. One question we would like to answer is whether a particular neuron is associated with the prediction. For that purpose, we analyze the prediction outcome and mean neural activity levels (measured by dF/F) from the 512 trials using a GLMM. The importance of modeling correlated data by introducing random effects has been shown in the previous examples. In this example, we focus on how to interpret results from a GLMM model in the water lick experiment.</p>
+<div id="fit-a-glmm-in-r" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Fit a GLMM in R<a href="generalized-linear-mixed-effects-models-and-example-4.html#fit-a-glmm-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Like a GLM, a GLMM requires the specification of a family of the distributions of the outcomes and an appropriate link function. Because the outcomes in this example are binary, the natural choice, which is often called the canonical link of the “binomial” family, is the logistic link. For each family of distributions, there is a canonical link, which is well defined and natural to that distribution family. For researchers with limited experience with GLM or GLMM, a good starting point, which is often a reasonable choice, is to use the default choice (i.e., the canonical link).</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4) <span class="co">#the main functions are &quot;lmer&quot; and glmer</span></span>
+<span id="cb73-2"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pbkrtest)</span>
+<span id="cb73-3"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-3" aria-hidden="true" tabindex="-1"></a><span class="co">#read data from the file named “waterlick_sim.txt”</span></span>
+<span id="cb73-4"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-4" aria-hidden="true" tabindex="-1"></a>waterlick<span class="ot">=</span><span class="fu">read.table</span>(<span class="st">&quot;https://www.ics.uci.edu/~zhaoxia/Data/BeyondTandANOVA/waterlick_sim.txt&quot;</span>, <span class="at">head=</span>T)</span>
+<span id="cb73-5"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-5" aria-hidden="true" tabindex="-1"></a><span class="co">#take a look at the data</span></span>
+<span id="cb73-6"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(waterlick)</span>
+<span id="cb73-7"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-7" aria-hidden="true" tabindex="-1"></a><span class="co">#change the mouseID to a factor</span></span>
+<span id="cb73-8"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-8" aria-hidden="true" tabindex="-1"></a>waterlick[,<span class="dv">1</span>]<span class="ot">=</span><span class="fu">as.factor</span>(waterlick[,<span class="dv">1</span>])</span>
+<span id="cb73-9"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-9" aria-hidden="true" tabindex="-1"></a><span class="co">#use glmer to fit a GLMM model</span></span>
+<span id="cb73-10"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-10" aria-hidden="true" tabindex="-1"></a>obj.glmm<span class="ot">=</span><span class="fu">glmer</span>(lick<span class="sc">~</span>dff<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>mouseID),</span>
+<span id="cb73-11"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-11" aria-hidden="true" tabindex="-1"></a><span class="at">data=</span>waterlick,<span class="at">family=</span><span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb73-12"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-12" aria-hidden="true" tabindex="-1"></a><span class="co">#summarize the model</span></span>
+<span id="cb73-13"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-13" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj.glmm)</span>
+<span id="cb73-14"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-14" aria-hidden="true" tabindex="-1"></a><span class="co">#compute increase in odds and a 95% CI</span></span>
+<span id="cb73-15"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb73-15" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">c</span>(<span class="fl">0.06235</span>, <span class="fl">0.06235-1.96</span><span class="sc">*</span><span class="fl">0.01986</span>, <span class="fl">0.06235+1.96</span><span class="sc">*</span><span class="fl">0.01986</span>))<span class="sc">-</span><span class="dv">1</span></span></code></pre></div>
+<p>The default method of parameter estimation is the maximum likelihood with Laplace approximation. As shown in the Fixed effects section of the R output, the estimated increase in log-odds associated with one percent increase in dF/F is 0.06235 with a standard error of 0.01986 and the p-value
+(which is based on the large-sample Wald test) is 0.01693. Correspondingly, an approximate 95% CI is (0.06235-1.96*0.01986, 0.06235+1.96*0.01986), i.e., (0.0234244 0.1012756). In a logistic regression, the estimated coefficient of an independent variable is typically interpreted using the percentage of odds changed for a one-unit increase in the independent variable. In this example, exp(0.06235)=1.064,
+indicating that the odds of making correct licks increased by 6.4% (95% C.I.: 2.4%-10.7%) with one percent increase in dF/F.</p>
+<p>An alternative way to compute a p-value is to use a likelihood ratio test by comparing the likelihoods of the current model and a reduced model.</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit a smaller model, the model with the dff variable removed</span></span>
+<span id="cb74-2"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb74-2" aria-hidden="true" tabindex="-1"></a>obj.glmm.smaller<span class="ot">=</span><span class="fu">glmer</span>(lick<span class="sc">~</span>(<span class="dv">1</span><span class="sc">|</span>mouseID),</span>
+<span id="cb74-3"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="at">data=</span>waterlick,<span class="at">family=</span><span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb74-4"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb74-4" aria-hidden="true" tabindex="-1"></a><span class="co">#use the anova function to compare the likelihoods of the two models</span></span>
+<span id="cb74-5"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb74-5" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(obj.glmm, obj.glmm.smaller)</span>
+<span id="cb74-6"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb74-6" aria-hidden="true" tabindex="-1"></a><span class="co">#alternatively, one can use the “drop1” function to test the effect of dfff</span></span>
+<span id="cb74-7"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb74-7" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(obj.glmm, <span class="at">test=</span><span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<p>In the output from “anova(obj.glmm, obj.glmm.smaller),” the “Chisq” is the <span class="math inline">\(-2*log(L_0/L_1)\)</span>, where <span class="math inline">\(L_1\)</span> is the maximized likelihood of the model with dff and <span class="math inline">\(L_0\)</span> is the maximized likelihood of the model without the dff. The p-value was obtained using the large-sample likelihood ratio test.</p>
+</div>
+<div id="use-nonparametric-methods-to-produce-more-accurate-p-values" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> Use nonparametric methods to produce more accurate p-values<a href="generalized-linear-mixed-effects-models-and-example-4.html#use-nonparametric-methods-to-produce-more-accurate-p-values" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In GLMM, the p-value based on large-sample approximations might not be accurate. It is helpful to check whether nonparametric tests lead to similar findings. For example, one can use a parametric bootstrap method. For this example, the p-value from the parametric bootstrap test, which is slightly less significant than the p-values from the Wald or LRT test.</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The code might take a few minutes</span></span>
+<span id="cb75-2"><a href="generalized-linear-mixed-effects-models-and-example-4.html#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">PBmodcomp</span>(obj.glmm, obj.glmm.smaller)</span></code></pre></div>
+<p>By default, 1000 samples were generated to understand the null distribution of the likelihood ratio statistic. When a p-value is small, 1000 samples might not return an accurate estimation. In this situation, one can increase the number of samples to 10,000 or even more. One way to expedite computation is by using multiple cores. We encourage the interested readers to read the documentation of this package, which is available at <a href="https://cran.rproject.org/web/packages/pbkrtest/pbkrtest.pdf" class="uri">https://cran.rproject.org/web/packages/pbkrtest/pbkrtest.pdf</a>.</p>
+<p>A note on convergence. Compared to LME, GLMM is harder to converge. When increasing the number of iterations does not work, one can change the likelihood approximation methods and numerical maximization methods. If convergence is still problematic, one might want to consider modifying models. For example, eliminating some random effects will likely make the algorithm converge. In particular, when the number of levels of a categorical variable is small, using fixed- rather than random- effects might help resolve the convergence issues. Using Bayesian alternatives might also be helpful. We recommend readers to check several relevant websites for further guidance:</p>
+<p><a href="https://rstudio-pubs-static.s3.amazonaws.com/33653_57fc7b8e5d484c909b615d8633c01d51.html" class="uri">https://rstudio-pubs-static.s3.amazonaws.com/33653_57fc7b8e5d484c909b615d8633c01d51.html</a></p>
+<p><a href="https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html" class="uri">https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html</a></p>
+<p><a href="https://m-clark.github.io/posts/2020-03-16-convergence/" class="uri">https://m-clark.github.io/posts/2020-03-16-convergence/</a></p>
+
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-wei2020comparison" class="csl-entry">
+Wei, Ziqiang, Bei-Jung Lin, Tsai-Wen Chen, Kayvon Daie, Karel Svoboda, and Shaul Druckmann. 2020. <span>“A Comparison of Neuronal Population Dynamics Measured with Calcium Imaging and Electrophysiology.”</span> <em>PLoS Computational Biology</em> 16 (9): e1008198.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="conduct-lme-in-r-example-3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="a-bayesian-analysis-of-example-4.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["mm-in-neuroscience.pdf", "mm-in-neuroscience.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
