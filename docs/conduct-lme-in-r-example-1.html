@@ -320,7 +320,8 @@ div.csl-indent {
 <span id="cb28-5"><a href="conduct-lme-in-r-example-1.html#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># formula (first argument) of the function</span></span>
 <span id="cb28-6"><a href="conduct-lme-in-r-example-1.html#cb28-6" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
 <span id="cb28-7"><a href="conduct-lme-in-r-example-1.html#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj.lmer)</span></code></pre></div>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: res ~ treatment_idx + (1 | midx)
 ##    Data: Ex1
 ## 
@@ -337,12 +338,14 @@ div.csl-indent {
 ## Number of obs: 1200, groups:  midx, 24
 ## 
 ## Fixed effects:
-##                Estimate Std. Error t value
-## (Intercept)      1.0007     0.1964   5.096
-## treatment_idx2   0.8194     0.2890   2.835
-## treatment_idx3   0.8429     0.3589   2.349
-## treatment_idx4   0.1898     0.3586   0.529
-## treatment_idx5  -0.3200     0.3043  -1.051
+##                Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)      1.0007     0.1964 18.9893   5.096 6.43e-05 ***
+## treatment_idx2   0.8194     0.2890 18.9831   2.835   0.0106 *  
+## treatment_idx3   0.8429     0.3589 19.0571   2.349   0.0298 *  
+## treatment_idx4   0.1898     0.3586 19.0046   0.529   0.6027    
+## treatment_idx5  -0.3200     0.3043 19.0164  -1.051   0.3062    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) trtm_2 trtm_3 trtm_4
@@ -387,28 +390,19 @@ div.csl-indent {
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>As noted earlier, p-values are not provided for the overall effect or individual treatments by the lmer function in the lme4 package. Next, we show how to use the lmerTest package to calculate p-values.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="conduct-lme-in-r-example-1.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmerTest)</span></code></pre></div>
-<pre><code>## Warning: package &#39;lmerTest&#39; was built under R version 4.1.3</code></pre>
-<pre><code>## 
-## Attaching package: &#39;lmerTest&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:lme4&#39;:
-## 
-##     lmer</code></pre>
-<pre><code>## The following object is masked from &#39;package:stats&#39;:
-## 
-##     step</code></pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="conduct-lme-in-r-example-1.html#cb41-1" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lmerTest<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
-<span id="cb41-2"><a href="conduct-lme-in-r-example-1.html#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co">#when ddf is not specified, the F test with Satterthwaite&#39;s method will be use</span></span>
-<span id="cb41-3"><a href="conduct-lme-in-r-example-1.html#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(obj.lmer, <span class="at">ddf=</span><span class="st">&quot;Kenward-Roger&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="conduct-lme-in-r-example-1.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmerTest)</span>
+<span id="cb36-2"><a href="conduct-lme-in-r-example-1.html#cb36-2" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lmerTest<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb36-3"><a href="conduct-lme-in-r-example-1.html#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co">#when ddf is not specified, the F test with Satterthwaite&#39;s method will be use</span></span>
+<span id="cb36-4"><a href="conduct-lme-in-r-example-1.html#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(obj.lmer, <span class="at">ddf=</span><span class="st">&quot;Kenward-Roger&quot;</span>)</span></code></pre></div>
 <pre><code>## Type III Analysis of Variance Table with Kenward-Roger&#39;s method
 ##               Sum Sq Mean Sq NumDF  DenDF F value   Pr(&gt;F)   
 ## treatment_idx   6.74   1.685     4 19.014  4.6878 0.008398 **
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="conduct-lme-in-r-example-1.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#likelihood ratio test</span></span>
-<span id="cb43-2"><a href="conduct-lme-in-r-example-1.html#cb43-2" aria-hidden="true" tabindex="-1"></a>obj.lmer.ml<span class="ot">=</span>lme4<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1, <span class="at">REML=</span>F)</span>
-<span id="cb43-3"><a href="conduct-lme-in-r-example-1.html#cb43-3" aria-hidden="true" tabindex="-1"></a>obj.lmer0.ml<span class="ot">=</span>lme4<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> <span class="dv">1</span><span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1, <span class="at">REML=</span>F)</span>
-<span id="cb43-4"><a href="conduct-lme-in-r-example-1.html#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(obj.lmer0.ml, obj.lmer.ml)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="conduct-lme-in-r-example-1.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#likelihood ratio test</span></span>
+<span id="cb38-2"><a href="conduct-lme-in-r-example-1.html#cb38-2" aria-hidden="true" tabindex="-1"></a>obj.lmer.ml<span class="ot">=</span>lme4<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1, <span class="at">REML=</span>F)</span>
+<span id="cb38-3"><a href="conduct-lme-in-r-example-1.html#cb38-3" aria-hidden="true" tabindex="-1"></a>obj.lmer0.ml<span class="ot">=</span>lme4<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> <span class="dv">1</span><span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1, <span class="at">REML=</span>F)</span>
+<span id="cb38-4"><a href="conduct-lme-in-r-example-1.html#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(obj.lmer0.ml, obj.lmer.ml)</span></code></pre></div>
 <pre><code>## Data: Ex1
 ## Models:
 ## obj.lmer0.ml: res ~ 1 + (1 | midx)
@@ -418,12 +412,12 @@ div.csl-indent {
 ## obj.lmer.ml     7 2273.0 2308.6 -1129.5   2259.0 16.48  4   0.002438 **
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="conduct-lme-in-r-example-1.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#drop1(obj.lmer.ml, test=&quot;Chisq&quot;) also works</span></span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="conduct-lme-in-r-example-1.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#drop1(obj.lmer.ml, test=&quot;Chisq&quot;) also works</span></span></code></pre></div>
 <p>Remarks: (i) Since the function <em>lmer</em> is in both <strong>nlme</strong> and <strong>lmerTest</strong>, to ensure that the <em>lmer</em> from lmerTest is used, we specify the package name by using double colon: <em>lmerTest::lmer</em>. (ii) The default method of calculating the denominator degrees of freedom is Satterwhite’s method. One can use the option ddf to choose the Kenward-Roger method, which is often preferred by many researchers. (iii) Based on the simulation studies in (<span class="citation"><a href="#ref-pinheiro2006mixed" role="doc-biblioref">José Pinheiro and Bates</a> (<a href="#ref-pinheiro2006mixed" role="doc-biblioref">2006</a>)</span>), F tests usually perform better than likelihood ratio tests.</p>
 <p><strong>P-values for individual treatments</strong>. The effects of individual treatments are also of great interest. As shown earlier, the individual p-values from <em>nlme::lme</em> can be obtained by using the summary function. Similarly, one can also obtain individual p-values by using the lmerTest package for a model fit by <em>lmer</em>.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="conduct-lme-in-r-example-1.html#cb46-1" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lmerTest<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
-<span id="cb46-2"><a href="conduct-lme-in-r-example-1.html#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(obj.lmer) #Sattertwhaite&#39;s method for denominator degrees of freedom</span></span>
-<span id="cb46-3"><a href="conduct-lme-in-r-example-1.html#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj.lmer, <span class="at">ddf=</span><span class="st">&quot;Kenward-Roger&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="conduct-lme-in-r-example-1.html#cb41-1" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lmerTest<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb41-2"><a href="conduct-lme-in-r-example-1.html#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(obj.lmer) #Sattertwhaite&#39;s method for denominator degrees of freedom</span></span>
+<span id="cb41-3"><a href="conduct-lme-in-r-example-1.html#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj.lmer, <span class="at">ddf=</span><span class="st">&quot;Kenward-Roger&quot;</span>)</span></code></pre></div>
 <pre><code>## Linear mixed model fit by REML. t-tests use Kenward-Roger&#39;s method [
 ## lmerModLmerTest]
 ## Formula: res ~ treatment_idx + (1 | midx)
@@ -461,9 +455,9 @@ div.csl-indent {
 <div id="p-value-adjustment-for-multiple-comparisons" class="section level2 hasAnchor" number="4.5">
 <h2><span class="header-section-number">4.5</span> P-value adjustment for multiple comparisons<a href="conduct-lme-in-r-example-1.html#p-value-adjustment-for-multiple-comparisons" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Note that the individual p-values shown above are for the comparison between each treatment group and the control group. Multiple comparisons have not been considered so far. Once a model is fit and an overall significance has been established, a natural question is which treatments are different from each other among a set of treatments. Consider Example 1, which involves five experimental conditions. The number of comparisons to examine all pairs of conditions is 10. When using unadjusted p-values and conducting testing at significance level <span class="math inline">\(\alpha =0.05\)</span>, the chance that we will make at least one false positive is much greater than 5%. The <strong>emmeans</strong> package can be used to adjust p-values by taking multiple comparisons into consideration. Two useful options are (i) the adjustment of multiple comparisons for all pairs of treatment by adding “pairwise” and (ii) the adjustment for comparisons for all the treatments to the control by adding “trt.vs.ctrl” and specifying the reference group, which is group “1” in this example.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="conduct-lme-in-r-example-1.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
-<span id="cb48-2"><a href="conduct-lme-in-r-example-1.html#cb48-2" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lme4<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
-<span id="cb48-3"><a href="conduct-lme-in-r-example-1.html#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(<span class="fu">emmeans</span>(obj.lmer, <span class="at">specs=</span><span class="st">&quot;treatment_idx&quot;</span>), <span class="st">&quot;pairwise&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="conduct-lme-in-r-example-1.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb43-2"><a href="conduct-lme-in-r-example-1.html#cb43-2" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lme4<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb43-3"><a href="conduct-lme-in-r-example-1.html#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(<span class="fu">emmeans</span>(obj.lmer, <span class="at">specs=</span><span class="st">&quot;treatment_idx&quot;</span>), <span class="st">&quot;pairwise&quot;</span>)</span></code></pre></div>
 <pre><code>##  contrast estimate    SE   df t.ratio p.value
 ##  1 - 2     -0.8194 0.289 19.0  -2.835  0.0704
 ##  1 - 3     -0.8429 0.359 19.1  -2.349  0.1727
@@ -478,8 +472,8 @@ div.csl-indent {
 ## 
 ## Degrees-of-freedom method: kenward-roger 
 ## P value adjustment: tukey method for comparing a family of 5 estimates</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="conduct-lme-in-r-example-1.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the default method of degrees of freedom is Kenward-Roger’s method</span></span>
-<span id="cb50-2"><a href="conduct-lme-in-r-example-1.html#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(<span class="fu">emmeans</span>(obj.lmer, <span class="at">specs=</span><span class="st">&quot;treatment_idx&quot;</span>), <span class="st">&quot;trt.vs.ctrl&quot;</span>, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="conduct-lme-in-r-example-1.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the default method of degrees of freedom is Kenward-Roger’s method</span></span>
+<span id="cb45-2"><a href="conduct-lme-in-r-example-1.html#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(<span class="fu">emmeans</span>(obj.lmer, <span class="at">specs=</span><span class="st">&quot;treatment_idx&quot;</span>), <span class="st">&quot;trt.vs.ctrl&quot;</span>, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>)</span></code></pre></div>
 <pre><code>##  contrast estimate    SE   df t.ratio p.value
 ##  2 - 1       0.819 0.289 19.0   2.835  0.0364
 ##  3 - 1       0.843 0.359 19.1   2.349  0.0965
@@ -493,19 +487,19 @@ div.csl-indent {
 <div id="robust-methods-with-parametric-bootstrap" class="section level2 hasAnchor" number="4.6">
 <h2><span class="header-section-number">4.6</span> Robust methods with parametric bootstrap<a href="conduct-lme-in-r-example-1.html#robust-methods-with-parametric-bootstrap" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Instead of relying on large-sample distributions or approximations based on F distributions, the <strong>pbkrtest</strong> package provides a parametric bootstrap test to compare two models, as shown below. Resampling methods, such as bootstrap, are often believed to be more robust than their parametric counterparts.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="conduct-lme-in-r-example-1.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pbkrtest)</span>
-<span id="cb52-2"><a href="conduct-lme-in-r-example-1.html#cb52-2" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lmerTest<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
-<span id="cb52-3"><a href="conduct-lme-in-r-example-1.html#cb52-3" aria-hidden="true" tabindex="-1"></a>obj.lmer0<span class="ot">=</span>lmerTest<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> <span class="dv">1</span><span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
-<span id="cb52-4"><a href="conduct-lme-in-r-example-1.html#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="co">#the following code might take a few minutes</span></span>
-<span id="cb52-5"><a href="conduct-lme-in-r-example-1.html#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="fu">PBmodcomp</span>(obj.lmer, obj.lmer0)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="conduct-lme-in-r-example-1.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pbkrtest)</span>
+<span id="cb47-2"><a href="conduct-lme-in-r-example-1.html#cb47-2" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lmerTest<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb47-3"><a href="conduct-lme-in-r-example-1.html#cb47-3" aria-hidden="true" tabindex="-1"></a>obj.lmer0<span class="ot">=</span>lmerTest<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> <span class="dv">1</span><span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb47-4"><a href="conduct-lme-in-r-example-1.html#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co">#the following code might take a few minutes</span></span>
+<span id="cb47-5"><a href="conduct-lme-in-r-example-1.html#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="fu">PBmodcomp</span>(obj.lmer, obj.lmer0)</span></code></pre></div>
 </div>
 <div id="additional-tools" class="section level2 hasAnchor" number="4.7">
 <h2><span class="header-section-number">4.7</span> Additional tools<a href="conduct-lme-in-r-example-1.html#additional-tools" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>There are other potentially useful alternative functions, such as <em>car::Anova</em>, and <em>sjPlot::plot_scatter</em>, <em>sjPlot::plot_model</em>. We provide sample code and encourage interested readers to continue exploring these packages if they wish to compare additional tools.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="conduct-lme-in-r-example-1.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car) <span class="co">#load the car library</span></span>
-<span id="cb53-2"><a href="conduct-lme-in-r-example-1.html#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjPlot) <span class="co">#load the sjPlot library</span></span>
-<span id="cb53-3"><a href="conduct-lme-in-r-example-1.html#cb53-3" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lme4<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
-<span id="cb53-4"><a href="conduct-lme-in-r-example-1.html#cb53-4" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(obj.lmer, <span class="at">test.statistic=</span><span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="conduct-lme-in-r-example-1.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car) <span class="co">#load the car library</span></span>
+<span id="cb48-2"><a href="conduct-lme-in-r-example-1.html#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjPlot) <span class="co">#load the sjPlot library</span></span>
+<span id="cb48-3"><a href="conduct-lme-in-r-example-1.html#cb48-3" aria-hidden="true" tabindex="-1"></a>obj.lmer<span class="ot">=</span>lme4<span class="sc">::</span><span class="fu">lmer</span>(res <span class="sc">~</span> treatment_idx<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>midx), <span class="at">data=</span>Ex1)</span>
+<span id="cb48-4"><a href="conduct-lme-in-r-example-1.html#cb48-4" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(obj.lmer, <span class="at">test.statistic=</span><span class="st">&quot;F&quot;</span>)</span></code></pre></div>
 <pre><code>## Analysis of Deviance Table (Type II Wald F tests with Kenward-Roger df)
 ## 
 ## Response: res
@@ -513,9 +507,9 @@ div.csl-indent {
 ## treatment_idx 4.6878  4 19.014 0.008398 **
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="conduct-lme-in-r-example-1.html#cb55-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(obj.lmer)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="conduct-lme-in-r-example-1.html#cb50-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(obj.lmer)</span></code></pre></div>
 <p><img src="mm-in-neuroscience_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="conduct-lme-in-r-example-1.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_scatter</span>(Ex1, midx, res, treatment_idx)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="conduct-lme-in-r-example-1.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_scatter</span>(Ex1, midx, res, treatment_idx)</span></code></pre></div>
 <p><img src="mm-in-neuroscience_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
 
 </div>

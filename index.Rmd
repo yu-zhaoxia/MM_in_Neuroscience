@@ -17,7 +17,7 @@ This is the online supplemental to accompany Yu Z, Guindani M, Grieco SF, Chen L
 <https://doi.org/10.1016/j.neuron.2021.10.030>.
 
 
-The data used in this supplementary can be download from the following website:
+The data used in this supplementary can be downloaded from the following website:
 <https://www.ics.uci.edu/~zhaoxia/Data/BeyondTandANOVA/>.
 
 ```{r, out.width="100%"}
