@@ -1,0 +1,1 @@
+Supplementary and code for "Yu, Z., Guindani, M., Grieco, S.F., Chen, L., Holmes, T.C. and Xu, X., 2022. Beyond t test and ANOVA: applications of mixed-effects models for more rigorous statistical analysis in neuroscience research. Neuron, 110(1), pp.21-35."
